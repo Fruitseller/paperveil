@@ -12,6 +12,10 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/PaperVeil"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+# App-Icon: Icon-Composer-Datei → Assets.car (+ .icns-Fallback) per actool
+xcrun actool "$ROOT/Resources/PaperVeil.icon" --compile "$(cd "$APP/Contents/Resources" && pwd)" --platform macosx \
+  --minimum-deployment-target 27.0 --app-icon PaperVeil \
+  --output-partial-info-plist "$(mktemp -d)/partial.plist" >/dev/null
 # Ad-hoc signature only: no Developer ID, not notarized (see README "Signierung").
 codesign --force --sign - --timestamp=none "$APP"
 (cd "$OUT" && rm -f PaperVeil.zip && ditto -c -k --keepParent PaperVeil.app PaperVeil.zip)

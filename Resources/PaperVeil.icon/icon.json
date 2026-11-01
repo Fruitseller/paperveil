@@ -1,0 +1,41 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.18039,0.25098,0.36078,1.00000",
+      "srgb:0.09412,0.12941,0.20000,1.00000"
+    ]
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "4-redaction.png",
+          "name" : "4-redaction",
+          "opacity" : 0.8
+        },
+        {
+          "image-name" : "3-lines.png",
+          "name" : "3-lines"
+        },
+        {
+          "image-name" : "2-document.png",
+          "name" : "2-document"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.3
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
