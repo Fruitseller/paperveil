@@ -110,6 +110,8 @@ Freigabe sperren. Ohne LLM funktionieren Sperrliste, Regeln und die manuelle Pr�
 Originale bleiben, wo sie sind, und werden nur gelesen. Löschen: Kontextmenü *Aus Liste entfernen
 und Arbeitsdaten löschen* oder *Einstellungen → Daten → Alle lokalen Daten löschen*.
 
+**Verschlüsselung:** PaperVeil verschlüsselt seine Dateien nicht selbst. Schutz im Ruhezustand bietet FileVault, das aktiviert sein sollte.
+
 **Grenzen:** Löschen entfernt Dateien über das Dateisystem. Kopien in Time Machine, Snapshots,
 iCloud-Synchronisierung des Ordners oder auf SSD-Ebene bleiben möglicherweise bestehen. Eine sichere
 physische Löschung wird nicht versprochen. Logs (`log stream --predicate 'subsystem == "de.paperveil.app"'`)
