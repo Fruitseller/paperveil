@@ -27,7 +27,10 @@ struct ContentView: View {
                                            description: Text("Originale werden nie verändert. Exporte sind separate Kopien."))
                 }
             }
-            .navigationSplitViewColumnWidth(min: 260, ideal: 300)
+            .dropDestination(for: URL.self) { urls, _ in
+                model.add(urls: urls.filter(\.isFileURL)); return true
+            } isTargeted: { dropTargeted = $0 }
+            .navigationSplitViewColumnWidth(min: 240, ideal: 280)
             .toolbar {
                 Button("PDFs hinzufügen", systemImage: "plus") { importing = true }
             }
@@ -96,6 +99,9 @@ struct QueueRow: View {
                 }
             }
             .font(.caption).foregroundStyle(.secondary).lineLimit(2)
+            // Local-only hint for the user; never used in exports, manifests or logs.
+            Text(URL(fileURLWithPath: job.originalPath).lastPathComponent)
+                .font(.caption2).foregroundStyle(.tertiary).lineLimit(1).truncationMode(.middle)
         }
         .padding(.vertical, 2)
     }

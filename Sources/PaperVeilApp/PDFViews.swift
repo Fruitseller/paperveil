@@ -18,6 +18,7 @@ struct OriginalPDFView: NSViewRepresentable {
         v.autoScales = true
         v.displayMode = .singlePageContinuous
         v.displaysPageBreaks = true
+        v.unregisterDraggedTypes() // file drops go to the app's import handler, not into the viewer
         return v
     }
 
@@ -109,7 +110,7 @@ struct ExportPDFView: NSViewRepresentable {
     let url: URL?
     final class View: PDFView { var loadedURL: URL? }
     func makeNSView(context: Context) -> View {
-        let v = View(); v.autoScales = true; v.displayMode = .singlePageContinuous; return v
+        let v = View(); v.autoScales = true; v.displayMode = .singlePageContinuous; v.unregisterDraggedTypes(); return v
     }
     func updateNSView(_ v: View, context: Context) {
         guard v.loadedURL != url else { return }

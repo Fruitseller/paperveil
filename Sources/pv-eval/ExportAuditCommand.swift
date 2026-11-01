@@ -349,8 +349,10 @@ enum ExportAuditCommand {
                 let originalText = originalOCRPages.first { $0.pageIndex == item.pageIndex }?.text ?? ""
                 let strictExport = EvalContainsLoose(item.text, in: exportText)
                 let strictOriginal = EvalContainsLoose(item.text, in: originalText)
-                let nearExport = strictExport || EvalContainsNear(item.text, in: exportText)
-                let nearOriginal = strictOriginal || EvalContainsNear(item.text, in: originalText)
+                // Table cells are often returned as separate OCR observations, so also accept
+                // "every token of the item is recognised on that page" (counted as tolerance).
+                let nearExport = strictExport || EvalContainsNear(item.text, in: exportText) || EvalContainsAllTokens(item.text, in: exportText)
+                let nearOriginal = strictOriginal || EvalContainsNear(item.text, in: originalText) || EvalContainsAllTokens(item.text, in: originalText)
                 let result = MustPreserveOCRResult(
                     text: item.text,
                     foundInExport: nearExport,
@@ -611,4 +613,12 @@ enum ExportAuditCommand {
         }
         return lines.joined(separator: "\n")
     }
+}
+
+/// True if every whitespace-separated token of `needle` occurs (case-insensitive) as a
+/// whitespace-delimited token in `haystack`.
+func EvalContainsAllTokens(_ needle: String, in haystack: String) -> Bool {
+    let hay = Set(haystack.lowercased().split(whereSeparator: \.isWhitespace).map(String.init))
+    let tokens = needle.lowercased().split(whereSeparator: \.isWhitespace).map(String.init)
+    return !tokens.isEmpty && tokens.allSatisfy(hay.contains)
 }

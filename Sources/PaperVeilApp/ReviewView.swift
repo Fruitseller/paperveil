@@ -21,7 +21,7 @@ struct ReviewView: View {
                     model.addManual(pageIndex: page, rect: rect, in: job.id)
                 }
             }
-            .frame(minWidth: 320)
+            .frame(minWidth: 260, idealWidth: 420)
             VStack(spacing: 0) {
                 paneHeader("Bereinigte Vorschau", detail: exportCaption)
                 if exportURL != nil {
@@ -30,8 +30,8 @@ struct ReviewView: View {
                     ContentUnavailableView("Noch kein Export", systemImage: "doc")
                 }
             }
-            .frame(minWidth: 320)
-            inspector.frame(minWidth: 300, idealWidth: 340, maxWidth: 420)
+            .frame(minWidth: 260, idealWidth: 420)
+            inspector.frame(minWidth: 340, idealWidth: 380, maxWidth: 480)
         }
         .toolbar {
             Toggle(isOn: $marking) { Label("Bereich markieren", systemImage: "rectangle.dashed") }
@@ -118,6 +118,7 @@ struct ReviewView: View {
                 }
                 if !blockers.isEmpty {
                     Text("Freigabe gesperrt: " + blockers.joined(separator: " · ")).font(.caption).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 transferInfo
             default:
@@ -154,11 +155,12 @@ struct FindingRow: View {
             }
             Spacer()
             Picker("", selection: Binding(get: { finding.decision }, set: decide)) {
-                Text("?").tag(FindingDecision.proposed)
-                Image(systemName: "eye.slash").tag(FindingDecision.accepted)
-                Image(systemName: "eye").tag(FindingDecision.rejected)
+                Text("?").accessibilityLabel("Ungeprüft").tag(FindingDecision.proposed)
+                Image(systemName: "eye.slash").accessibilityLabel("Schwärzen").tag(FindingDecision.accepted)
+                Image(systemName: "eye").accessibilityLabel("Nicht schwärzen").tag(FindingDecision.rejected)
             }
-            .pickerStyle(.segmented).frame(width: 110).disabled(busy)
+            .pickerStyle(.segmented).fixedSize().disabled(busy)
+            .accessibilityLabel("Entscheidung")
             .help("? = ungeprüft · durchgestrichenes Auge = schwärzen · Auge = nicht schwärzen")
         }
     }

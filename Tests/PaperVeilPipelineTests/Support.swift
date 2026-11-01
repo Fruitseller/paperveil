@@ -92,9 +92,12 @@ final class LocalSSHServer: @unchecked Sendable {
     }
 
     func stop() {
-        process?.terminate()
-        process?.waitUntilExit()
+        guard let p = process else { return }
         process = nil
+        p.terminate()
+        // Bounded wait (waitUntilExit can block indefinitely here); escalate to SIGKILL.
+        for _ in 0..<50 where p.isRunning { Thread.sleep(forTimeInterval: 0.1) }
+        if p.isRunning { kill(p.processIdentifier, SIGKILL) }
     }
 
     var config: TransferConfiguration {
