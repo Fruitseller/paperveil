@@ -15,19 +15,24 @@ let package = Package(
         .target(name: "PaperVeilDetection", dependencies: ["PaperVeilCore"]),
         .target(name: "PaperVeilExport", dependencies: ["PaperVeilCore"]),
         .target(name: "PaperVeilTransfer", dependencies: ["PaperVeilCore"]),
+        .target(
+            name: "PaperVeilPipeline",
+            dependencies: ["PaperVeilCore", "PaperVeilExtraction", "PaperVeilDetection", "PaperVeilExport"]
+        ),
         .executableTarget(
             name: "PaperVeilApp",
-            dependencies: ["PaperVeilCore", "PaperVeilExtraction", "PaperVeilDetection", "PaperVeilExport", "PaperVeilTransfer"]
+            dependencies: ["PaperVeilCore", "PaperVeilPipeline", "PaperVeilDetection", "PaperVeilTransfer"]
         ),
         .executableTarget(name: "pv-fixtures", dependencies: ["PaperVeilCore"]),
         .executableTarget(
             name: "pv-eval",
-            dependencies: ["PaperVeilCore", "PaperVeilExtraction", "PaperVeilDetection", "PaperVeilExport"]
+            dependencies: ["PaperVeilCore", "PaperVeilPipeline", "PaperVeilExtraction", "PaperVeilDetection", "PaperVeilExport"]
         ),
         .testTarget(name: "PaperVeilCoreTests", dependencies: ["PaperVeilCore"]),
         .testTarget(name: "PaperVeilExtractionTests", dependencies: ["PaperVeilExtraction"]),
         .testTarget(name: "PaperVeilDetectionTests", dependencies: ["PaperVeilDetection"]),
         .testTarget(name: "PaperVeilExportTests", dependencies: ["PaperVeilExport", "PaperVeilExtraction"]),
+        .testTarget(name: "PaperVeilPipelineTests", dependencies: ["PaperVeilPipeline"]),
         .testTarget(name: "PaperVeilTransferTests", dependencies: ["PaperVeilTransfer"]),
     ],
     swiftLanguageModes: [.v6]
