@@ -4,7 +4,7 @@ import PaperVeilExtraction
 import Vision
 @testable import PaperVeilExport
 
-@Suite struct OCRRoundTripTests {
+@Suite(.requiresOCR) struct OCRRoundTripTests {
     /// Independent OCR proof (Apple Vision, local): after the export the
     /// marker must be unreadable even from the pixels, while the non-redacted
     /// medical line stays readable. The unredacted source is the positive

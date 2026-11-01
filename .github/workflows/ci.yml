@@ -41,8 +41,20 @@ jobs:
         run: |
           swift run -c release pv-fixtures "$RUNNER_TEMP/fixtures"
           diff -u Fixtures/synthetic/annotations.json "$RUNNER_TEMP/fixtures/annotations.json"
+      - name: OCR availability on this runner
+        id: ocr
+        run: |
+          if swift run -c release pv-eval ocr-probe; then echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Vision-OCR läuft auf diesem Runner nicht. OCR-abhängige Tests, Qualitätsbericht und Export-Audit sind hier NICHT geprüft (lokal verifiziert, siehe docs/acceptance)."
+          fi
       - name: Quality report (rules only, no LLM)
+        if: steps.ocr.outputs.available == 'true'
         run: swift run -c release pv-eval report --fixtures Fixtures/synthetic --out "$RUNNER_TEMP/quality-report.md"
+      - name: Export audit
+        if: steps.ocr.outputs.available == 'true'
+        run: swift run -c release pv-eval export-audit --fixtures Fixtures/synthetic --out "$RUNNER_TEMP/export-audit.md"
       - name: Build app bundle
         run: ./scripts/build-app.sh "$RUNNER_TEMP/dist"
       - uses: actions/upload-artifact@v7
@@ -51,6 +63,8 @@ jobs:
           path: |
             ${{ runner.temp }}/dist/PaperVeil.zip
             ${{ runner.temp }}/quality-report.md
+            ${{ runner.temp }}/export-audit.md
+          if-no-files-found: warn
           retention-days: 7
 
   receiver-linux:

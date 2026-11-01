@@ -1,5 +1,6 @@
 import Foundation
 import PaperVeilDetection
+import PaperVeilExtraction
 
 let usage = """
 pv-eval – Evaluations- und Audit-CLI von PaperVeil (Zielzustand B06, C02–C05)
@@ -99,6 +100,12 @@ if subcommand == "report" {
         llm: llm,
         only: only)
     exit(await ReportCommand.run(options))
+}
+
+if subcommand == "ocr-probe" {
+    let ok = await OCRCompute.isAvailable()
+    print(ok ? "Vision-OCR verfügbar" : "Vision-OCR auf dieser Maschine NICHT verfügbar")
+    exit(ok ? 0 : 1)
 }
 
 if subcommand == "export-audit" {

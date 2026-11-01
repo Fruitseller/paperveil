@@ -35,7 +35,7 @@ struct PageExtractorTests {
         #expect(abs(muller.rect.y - expected.minY) <= 2)
     }
 
-    @Test("Bildseite (Scan) wird per OCR verarbeitet und als abgeleitet markiert")
+    @Test("Bildseite (Scan) wird per OCR verarbeitet und als abgeleitet markiert", .requiresOCR)
     func scanPageIsOCRAndWarned() async throws {
         let factory = try makeFixtureFactory()
         let (url, drawn) = try factory.makeScanPDF(
@@ -68,7 +68,7 @@ struct PageExtractorTests {
         }
     }
 
-    @Test("Gemischte Seite: PDF-Text und OCR werden zusammengeführt")
+    @Test("Gemischte Seite: PDF-Text und OCR werden zusammengeführt", .requiresOCR)
     func mixedPageMergesPDFAndOCR() async throws {
         var factory = try makeFixtureFactory()
         let (url, _) = try factory.makeMixedPDF(
@@ -95,7 +95,7 @@ struct PageExtractorTests {
         #expect(result.warnings.contains { $0.kind == .ocrOnlyPage && $0.pageIndex == 0 })
     }
 
-    @Test("Originaldatei bleibt nach Extraktion unverändert")
+    @Test("Originaldatei bleibt nach Extraktion unverändert", .requiresOCR)
     func originalFileUnchanged() async throws {
         let factory = try makeFixtureFactory()
         let (url, _) = try factory.makeScanPDF(
@@ -132,7 +132,7 @@ struct PageExtractorTests {
         }
     }
 
-    @Test("Mehrzeiliges Dokument verarbeitet alle Seiten")
+    @Test("Mehrzeiliges Dokument verarbeitet alle Seiten", .requiresOCR)
     func multiPageDocument() async throws {
         let factory = try makeFixtureFactory()
         let url = factory.directory.appendingPathComponent("mehrseitig.pdf")
