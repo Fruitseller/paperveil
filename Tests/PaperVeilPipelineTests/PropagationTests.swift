@@ -25,3 +25,17 @@ import Testing
         }
     }
 }
+
+@Suite struct DeduplicationTests {
+    @Test func identicalSpotsKeepAllOrigins() {
+        let id = DocumentID.generate()
+        let r = [PageRect(x: 10, y: 10, width: 50, height: 10)]
+        let rule = Finding(documentID: id, pageIndex: 0, rects: r, text: "Erika Mustermann", category: .name, origin: .rule)
+        let llm = Finding(documentID: id, pageIndex: 0, rects: r, text: "Erika Mustermann", category: .name, origin: .llm)
+        let block = Finding(documentID: id, pageIndex: 0, rects: r, text: "Erika Mustermann", category: .name, origin: .blocklist)
+        let merged = DocumentPipeline.deduplicate([block, rule, llm])
+        #expect(merged.count == 1)
+        #expect(merged[0].origin == .blocklist)
+        #expect(merged[0].note == "Auch erkannt: Regel, LLM")
+    }
+}

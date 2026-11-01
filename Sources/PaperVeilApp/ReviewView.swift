@@ -152,6 +152,9 @@ struct FindingRow: View {
                     .lineLimit(2).strikethrough(finding.decision == .rejected)
                 Text("\(PhaseText.category(finding.category)) · \(PhaseText.origin(finding.origin)) · S. \(finding.pageIndex + 1)")
                     .font(.caption).foregroundStyle(.secondary)
+                if let note = finding.note {
+                    Text(note).font(.caption2).foregroundStyle(.secondary)
+                }
             }
             Spacer()
             Picker("", selection: Binding(get: { finding.decision }, set: decide)) {

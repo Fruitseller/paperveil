@@ -36,7 +36,7 @@ struct ContentView: View {
             }
         } detail: {
             if let id = model.selection, let job = model.job(id) {
-                ReviewView(job: job)
+                ReviewView(job: job).id(job.id) // fresh view (and accessibility tree) per document
             } else {
                 ContentUnavailableView("Kein Dokument ausgewählt", systemImage: "doc.text.magnifyingglass")
             }

@@ -77,13 +77,17 @@ public struct ProcessRunner: CommandRunner {
             for (key, value) in request.environment { environment[key] = value }
             process.environment = environment
 
+            // terminationHandler instead of waitUntilExit(): the latter can block forever on a
+            // background thread without a run loop even after the child has exited.
+            let exit = ExitBox()
+            process.terminationHandler = { exit.finish($0.terminationStatus) }
             try process.run()
             control.markLaunched(process)
 
             // Drain both pipes concurrently while the child runs (no 64 KB deadlock).
             let stdoutRead = Task { await Self.readToEnd(FileHandleBox(stdoutPipe.fileHandleForReading)) }
             let stderrRead = Task { await Self.readToEnd(FileHandleBox(stderrPipe.fileHandleForReading)) }
-            let status = await Self.waitForExit(ProcessWaitBox(process))
+            let status = await exit.value()
             let stdout = await stdoutRead.value
             let stderr = await stderrRead.value
             try? stdoutPipe.fileHandleForReading.close()
@@ -107,14 +111,6 @@ public struct ProcessRunner: CommandRunner {
         }
     }
 
-    private static func waitForExit(_ box: ProcessWaitBox) async -> Int32 {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .utility).async {
-                box.process.waitUntilExit()
-                continuation.resume(returning: box.process.terminationStatus)
-            }
-        }
-    }
 }
 
 private final class FileHandleBox: @unchecked Sendable {
@@ -122,9 +118,27 @@ private final class FileHandleBox: @unchecked Sendable {
     init(_ handle: FileHandle) { self.handle = handle }
 }
 
-private final class ProcessWaitBox: @unchecked Sendable {
-    let process: Process
-    init(_ process: Process) { self.process = process }
+/// One-shot exit status that may arrive before or after someone awaits it.
+private final class ExitBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var status: Int32?
+    private var waiter: CheckedContinuation<Int32, Never>?
+
+    func finish(_ s: Int32) {
+        lock.lock()
+        if let w = waiter { waiter = nil; lock.unlock(); w.resume(returning: s); return }
+        status = s
+        lock.unlock()
+    }
+
+    func value() async -> Int32 {
+        await withCheckedContinuation { c in
+            lock.lock()
+            if let s = status { lock.unlock(); c.resume(returning: s); return }
+            waiter = c
+            lock.unlock()
+        }
+    }
 }
 
 /// Tracks the child so the cancellation handler can only terminate a running process.
