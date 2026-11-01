@@ -89,15 +89,35 @@ public struct DocumentPipeline: Sendable {
         return result
     }
 
-    /// Drops findings whose rects are identical to an earlier one on the same page
-    /// (priority: blocklist > rule > llm > manual, by input order).
+    /// Merges findings whose rects are identical on the same page. The first one is kept
+    /// (priority: blocklist > rule > llm, by input order); every other source that found the
+    /// same spot is recorded in `note` ("Auch erkannt: LLM") so provenance is never lost.
     public static func deduplicate(_ findings: [Finding]) -> [Finding] {
-        var seen = Set<String>()
-        return findings.filter { f in
+        var result: [Finding] = []
+        var index: [String: Int] = [:]
+        for f in findings {
             let key = "\(f.pageIndex)|" + f.rects.map { r in
                 String(format: "%.1f,%.1f,%.1f,%.1f", r.x, r.y, r.width, r.height)
             }.joined(separator: ";")
-            return seen.insert(key).inserted
+            guard let i = index[key] else { index[key] = result.count; result.append(f); continue }
+            guard f.origin != result[i].origin else { continue }
+            let label = originLabel(f.origin)
+            let note = result[i].note ?? ""
+            if note.contains("Auch erkannt:") {
+                if !note.contains(label) { result[i].note = note + ", " + label }
+            } else {
+                result[i].note = (note.isEmpty ? "" : note + " · ") + "Auch erkannt: " + label
+            }
+        }
+        return result
+    }
+
+    static func originLabel(_ o: FindingOrigin) -> String {
+        switch o {
+        case .blocklist: "Sperrliste"
+        case .rule: "Regel"
+        case .llm: "LLM"
+        case .manual: "Manuell"
         }
     }
 
