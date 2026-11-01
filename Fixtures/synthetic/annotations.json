@@ -1,0 +1,1825 @@
+{
+  "contentDate" : "2026-02-05",
+  "documents" : [
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F01-arztbrief.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-01",
+          "manualOnly" : false,
+          "note" : "Patientenblock",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 340,
+              "y" : 703.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "address",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-02",
+          "manualOnly" : false,
+          "note" : "Adresse über zwei Zeilen",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 73.97,
+              "x" : 340,
+              "y" : 687.47
+            },
+            {
+              "height" : 11,
+              "width" : 91.11,
+              "x" : 340,
+              "y" : 671.47
+            }
+          ],
+          "text" : "Musterstraße 5\n12345 Musterstadt"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-03",
+          "manualOnly" : false,
+          "note" : "mit „geb.“ markiert",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 55.05,
+              "x" : 364.47,
+              "y" : 655.47
+            }
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-04",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.4,
+              "x" : 377.91,
+              "y" : 639.47
+            }
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "phone",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-05",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 79.83,
+              "x" : 363.23,
+              "y" : 623.47
+            }
+          ],
+          "text" : "+49 30 1234567"
+        },
+        {
+          "category" : "email",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-06",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 9,
+              "width" : 130.69,
+              "x" : 370.5,
+              "y" : 608.93
+            }
+          ],
+          "text" : "erika.mustermann@example.org"
+        },
+        {
+          "category" : "patientID",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-07",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 42.63,
+              "x" : 121.14,
+              "y" : 703.7
+            }
+          ],
+          "text" : "P-471108"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-08",
+          "manualOnly" : false,
+          "note" : "im Fließtext",
+          "occurrence" : 1,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 60,
+              "y" : 580.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-09",
+          "manualOnly" : false,
+          "note" : "Anrede",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 86.81,
+              "x" : 126.66,
+              "y" : 619.47
+            }
+          ],
+          "text" : "Frau Mustermann"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-10",
+          "manualOnly" : false,
+          "note" : "Nachname im Fließtext",
+          "occurrence" : 0,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 86.81,
+              "x" : 60,
+              "y" : 621.47
+            }
+          ],
+          "text" : "Frau Mustermann"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-11",
+          "manualOnly" : false,
+          "note" : "vollständiger Name im Fließtext",
+          "occurrence" : 0,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 182.29,
+              "y" : 606.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F01-12",
+          "manualOnly" : false,
+          "note" : "Nachname im Fließtext",
+          "occurrence" : 0,
+          "pageIndex" : 2,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 86.81,
+              "x" : 60,
+              "y" : 636.47
+            }
+          ],
+          "text" : "Frau Mustermann"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "Blutdruckwert mit Schrägstrich",
+          "pageIndex" : 0,
+          "text" : "142\/86 mmHg"
+        },
+        {
+          "note" : "Dezimalkomma",
+          "pageIndex" : 0,
+          "text" : "7,8 %"
+        },
+        {
+          "note" : "Dezimalkomma + Einheit",
+          "pageIndex" : 0,
+          "text" : "0,9 mg\/dl"
+        },
+        {
+          "note" : "Einheit",
+          "pageIndex" : 0,
+          "text" : "139 mmol\/l"
+        },
+        {
+          "note" : "negativer Wert",
+          "pageIndex" : 0,
+          "text" : "-2,4 mmol\/l"
+        },
+        {
+          "note" : "klinisches Datum (Aufnahme)",
+          "pageIndex" : 0,
+          "text" : "20.01.2026 bis"
+        },
+        {
+          "note" : "klinisches Datum (Entlassung)",
+          "pageIndex" : 0,
+          "text" : "02.02.2026"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 1,
+          "text" : "27.01.2026"
+        },
+        {
+          "note" : "Dosierung",
+          "pageIndex" : 1,
+          "text" : "500 mg"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 1,
+          "text" : "128\/78 mmHg"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 1,
+          "text" : "01.02.2026"
+        },
+        {
+          "note" : "Dezimalkomma",
+          "pageIndex" : 1,
+          "text" : "7,2 %"
+        },
+        {
+          "note" : "klinische Zeitangabe",
+          "pageIndex" : 2,
+          "text" : "Kontrolle in vier Wochen"
+        },
+        {
+          "note" : "Kontrollparameter",
+          "pageIndex" : 2,
+          "text" : "Blutzucker, HbA1c, Nierenwerte"
+        }
+      ],
+      "notes" : "Mehrseitiger Arztbrief mit wiederholtem Namen, Adresse, Geburtsdatum (geb.), KV-Nr., Telefon und E-Mail. Klinik- und Arztdaten (Absender) sind absichtlich nicht als Identifikatoren annotiert (siehe policy).",
+      "pageCount" : 3,
+      "pageRotations" : [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F02-laborblatt.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F02-01",
+          "manualOnly" : false,
+          "note" : "Kopfzeile, 9 pt",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 9,
+              "width" : 73.02,
+              "x" : 100.03,
+              "y" : 755.93
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F02-02",
+          "manualOnly" : false,
+          "note" : "Kopfzeile, 9 pt",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 9,
+              "width" : 45.04,
+              "x" : 205.57,
+              "y" : 755.93
+            }
+          ],
+          "text" : "12.03.1967"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "Wert + Einheit (7,5 pt)",
+          "pageIndex" : 0,
+          "text" : "13,8 g\/dl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "41,2 %"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "9,6 \/nl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "248 \/nl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "139 mmol\/l"
+        },
+        {
+          "note" : "erniedrigter Wert mit Flagge",
+          "pageIndex" : 0,
+          "text" : "3,4 mmol\/l 3,5–5,1"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "0,9 mg\/dl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "38 mg\/dl"
+        },
+        {
+          "note" : "negativer Wert",
+          "pageIndex" : 0,
+          "text" : "Base Excess -2,4 mmol\/l"
+        },
+        {
+          "note" : "Referenzbereich mit Minus",
+          "pageIndex" : 0,
+          "text" : "-2,0–3,0"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "88 mg\/dl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "7,8 %"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "<5,7"
+        },
+        {
+          "note" : "klinische Datumsangabe (kein Geburtsdatum)",
+          "pageIndex" : 0,
+          "text" : "05.02.2026, 07:30 Uhr"
+        }
+      ],
+      "notes" : "Laborblatt mit 7,5-pt-Courier-Tabelle, Dezimalkommas, negativem Wert (Base Excess -2,4 mmol\/l), Einheiten, Referenzbereichen und Flaggen. Einsender\/Arztdaten sind nicht annotiert.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F03-medikationsplan.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F03-01",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 81.14,
+              "x" : 104.47,
+              "y" : 763.7
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F03-02",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 50.05,
+              "x" : 85.02,
+              "y" : 747.7
+            }
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "patientID",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F03-03",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 42.63,
+              "x" : 185.64,
+              "y" : 747.7
+            }
+          ],
+          "text" : "P-471108"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "Dosierung",
+          "pageIndex" : 0,
+          "text" : "500 mg"
+        },
+        {
+          "note" : "Einnahmeschema",
+          "pageIndex" : 0,
+          "text" : "1-0-1"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "100 mg"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "0-1-0"
+        },
+        {
+          "note" : "Mikrogramm-Dosierung",
+          "pageIndex" : 0,
+          "text" : "75 µg"
+        },
+        {
+          "note" : "Schema mit halber Tablette",
+          "pageIndex" : 0,
+          "text" : "0-0-1\/2"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "10 mg"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "1-0-0"
+        },
+        {
+          "note" : "Startdatum (klinisch)",
+          "pageIndex" : 0,
+          "text" : "15.01.2026"
+        },
+        {
+          "note" : "Startdatum (klinisch)",
+          "pageIndex" : 0,
+          "text" : "20.03.2026"
+        },
+        {
+          "note" : "klinisch relevante Verneinung",
+          "pageIndex" : 0,
+          "text" : "Keine Penicillinallergie bekannt."
+        },
+        {
+          "note" : "klinisch relevante Verneinung",
+          "pageIndex" : 0,
+          "text" : "Kein Marcumar."
+        }
+      ],
+      "notes" : "Medikationsplan mit Dosierungen (1-0-1, 500 mg, 0-0-1\/2), Startdaten und klinisch relevanten Verneinungen (Keine Penicillinallergie bekannt \/ Kein Marcumar).",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F04-scan.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F04-01",
+          "manualOnly" : false,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.87,
+              "x" : 112.58,
+              "y" : 693.47
+            }
+          ],
+          "text" : "Max Beispielmann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F04-02",
+          "manualOnly" : false,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 54.24,
+              "x" : 108.91,
+              "y" : 677.47
+            }
+          ],
+          "text" : "05.11.1958"
+        },
+        {
+          "category" : "address",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F04-03",
+          "manualOnly" : false,
+          "note" : "Adresse über zwei Zeilen",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 124.1,
+              "x" : 60,
+              "y" : 661.47
+            },
+            {
+              "height" : 11,
+              "width" : 130.84,
+              "x" : 60,
+              "y" : 645.47
+            }
+          ],
+          "text" : "Musterweg 17\n12345 Musterstadt"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F04-04",
+          "manualOnly" : false,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.3,
+              "x" : 113.09,
+              "y" : 629.47
+            }
+          ],
+          "text" : "Y987654321"
+        },
+        {
+          "category" : "image",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F04-05",
+          "manualOnly" : true,
+          "note" : "QR-Code-Bereich muss manuell geschwärzt werden (manualRegion).",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 90,
+              "width" : 90,
+              "x" : 445,
+              "y" : 380
+            }
+          ],
+          "text" : "QR-Code (Inhalt: PATIENT=Y987654321;GEB=05.11.1958;N=MAX BEISPIELMANN;SYNTHETIC)"
+        }
+      ],
+      "kind" : "scan",
+      "mustPreserve" : [
+        {
+          "note" : "klinisches Datum (nicht Geburtsdatum)",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 11,
+            "width" : 55.05,
+            "x" : 116.85,
+            "y" : 613.47
+          },
+          "text" : "05.02.2026"
+        },
+        {
+          "note" : "Veranlassung",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 11,
+            "width" : 81.33,
+            "x" : 132.78,
+            "y" : 577.47
+          },
+          "text" : "Verlaufskontrolle Diabetes mellitus Typ 2"
+        },
+        {
+          "note" : "Laborwert",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 11,
+            "width" : 33.02,
+            "x" : 100.98,
+            "y" : 559.47
+          },
+          "text" : "HbA1c 7,8 %"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 11,
+            "width" : 33.64,
+            "x" : 220.2,
+            "y" : 559.47
+          },
+          "text" : "142\/86 mmHg"
+        }
+      ],
+      "notes" : "Reiner Bildscan (eine Rasterseite ohne Textebene, 150 dpi Graustufen) mit sichtbaren Identifikatoren und QR-Code. Der QR-Bereich ist als manualRegion annotiert (manuell zu schwärzen). Praxis-\/Arztdaten sind nicht annotiert.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F05-rotation-beschnitt.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-01",
+          "manualOnly" : false,
+          "note" : "Seite mit \/Rotate 90",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 108.92,
+              "y" : 739.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-02",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 55.05,
+              "x" : 87.52,
+              "y" : 723.47
+            }
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-03",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.4,
+              "x" : 97.91,
+              "y" : 707.47
+            }
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-04",
+          "manualOnly" : false,
+          "note" : "Seite mit \/Rotate 180",
+          "occurrence" : 0,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 86.81,
+              "x" : 60,
+              "y" : 739.47
+            }
+          ],
+          "text" : "Frau Mustermann"
+        },
+        {
+          "category" : "phone",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-05",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 79.83,
+              "x" : 141.93,
+              "y" : 723.47
+            }
+          ],
+          "text" : "+49 30 1234567"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-06",
+          "manualOnly" : false,
+          "note" : "innerhalb der CropBox",
+          "occurrence" : 0,
+          "pageIndex" : 2,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 148.92,
+              "y" : 739.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "address",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-07",
+          "manualOnly" : false,
+          "note" : "innerhalb der CropBox, zwei Zeilen",
+          "occurrence" : 0,
+          "pageIndex" : 2,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 73.97,
+              "x" : 100,
+              "y" : 723.47
+            },
+            {
+              "height" : 11,
+              "width" : 91.11,
+              "x" : 100,
+              "y" : 707.47
+            }
+          ],
+          "text" : "Musterstraße 5\n12345 Musterstadt"
+        },
+        {
+          "category" : "insuranceNumber",
+          "channel" : "outsideCropBox",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F05-08",
+          "manualOnly" : false,
+          "note" : "Im linken Randstreifen außerhalb der CropBox gezeichnet; bleibt im Content-Stream, wird von der PDFKit-Textextraktion aber NICHT geliefert und muss als versteckter Identifikator behandelt werden.",
+          "occurrence" : 0,
+          "pageIndex" : 2,
+          "rects" : [
+            {
+              "height" : 7,
+              "width" : 39.71,
+              "x" : 10,
+              "y" : 418.39
+            }
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-09",
+          "manualOnly" : false,
+          "note" : "Name über Zeilenumbruch verteilt (Trennung mit Bindestrich).",
+          "occurrence" : 0,
+          "pageIndex" : 3,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 65.4,
+              "x" : 104.63,
+              "y" : 739.47
+            },
+            {
+              "height" : 11,
+              "width" : 27.52,
+              "x" : 60,
+              "y" : 724.47
+            }
+          ],
+          "text" : "Erika Muster-\nmann"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F05-10",
+          "manualOnly" : false,
+          "note" : "KV-Nr. über Zeilenumbruch verteilt (zwei Rects).",
+          "occurrence" : 0,
+          "pageIndex" : 3,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 31.81,
+              "x" : 210.43,
+              "y" : 679.47
+            },
+            {
+              "height" : 11,
+              "width" : 30.59,
+              "x" : 60,
+              "y" : 664.47
+            }
+          ],
+          "text" : "X1234\n56789"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "Blutzucker",
+          "pageIndex" : 0,
+          "text" : "132 mg\/dl"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "text" : "138\/82 mmHg"
+        },
+        {
+          "note" : "HbA1c",
+          "pageIndex" : 1,
+          "text" : "7,2 %"
+        },
+        {
+          "note" : "klinisch relevante Verneinung",
+          "pageIndex" : 1,
+          "text" : "Keine Hypoglykämie"
+        },
+        {
+          "note" : "Kreatinin",
+          "pageIndex" : 2,
+          "text" : "0,9 mg\/dl"
+        },
+        {
+          "note" : "negativer Base Excess",
+          "pageIndex" : 2,
+          "text" : "-2,4 mmol\/l"
+        },
+        {
+          "note" : "Dosierung",
+          "pageIndex" : 3,
+          "text" : "500 mg"
+        }
+      ],
+      "notes" : "Seite 0: \/Rotate 90. Seite 1: \/Rotate 180. Seite 2: CropBox kleiner als MediaBox; die KV-Nr. steht senkrecht im Randstreifen AUSSERHALB der CropBox (hidden\/outsideCropBox), bleibt aber im Content-Stream. Seite 3: Identifikatoren über Zeilenumbrüche („Muster-“\/„mann“; KV-Nr. „X1234“\/„56789“). Alle Rects im ungedrehten MediaBox-Seitenraum.",
+      "pageCount" : 4,
+      "pageRotations" : [
+        90,
+        180,
+        0,
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F06-gemischt.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-01",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 70.13,
+              "x" : 108.92,
+              "y" : 749.47
+            }
+          ],
+          "text" : "Paula Testfrau"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-02",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 55.05,
+              "x" : 87.52,
+              "y" : 733.47
+            }
+          ],
+          "text" : "21.06.1985"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-03",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 61.78,
+              "x" : 195.77,
+              "y" : 733.47
+            }
+          ],
+          "text" : "Z567890123"
+        },
+        {
+          "category" : "address",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-04",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 164.41,
+              "x" : 108.81,
+              "y" : 717.47
+            }
+          ],
+          "text" : "Testgasse 9, 54321 Beispielhafen"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-05",
+          "manualOnly" : false,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.87,
+              "x" : 106.47,
+              "y" : 759.47
+            }
+          ],
+          "text" : "Max Beispielmann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-06",
+          "manualOnly" : false,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 54.24,
+              "x" : 102.8,
+              "y" : 743.47
+            }
+          ],
+          "text" : "05.11.1958"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-07",
+          "manualOnly" : false,
+          "pageIndex" : 1,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.3,
+              "x" : 106.98,
+              "y" : 727.47
+            }
+          ],
+          "text" : "Y987654321"
+        },
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F06-08",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 2,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 70.13,
+              "x" : 125.43,
+              "y" : 747.47
+            }
+          ],
+          "text" : "Paula Testfrau"
+        }
+      ],
+      "kind" : "mixed",
+      "mustPreserve" : [
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "text" : "150\/95 mmHg"
+        },
+        {
+          "note" : "Blutzucker",
+          "pageIndex" : 0,
+          "text" : "112 mg\/dl"
+        },
+        {
+          "note" : "negativer Wert",
+          "pageIndex" : 0,
+          "text" : "-1,8 mmol\/l"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 0,
+          "text" : "05.02.2026"
+        },
+        {
+          "note" : "klinisches Datum mit Uhrzeit",
+          "pageIndex" : 1,
+          "rect" : {
+            "height" : 11,
+            "width" : 27.53,
+            "x" : 177.42,
+            "y" : 711.47
+          },
+          "text" : "05.02.2026, 22:15 Uhr"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 1,
+          "rect" : {
+            "height" : 11,
+            "width" : 33.64,
+            "x" : 149.89,
+            "y" : 679.47
+          },
+          "text" : "Blutdruck 150\/95 mmHg"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 2,
+          "text" : "132\/84 mmHg"
+        },
+        {
+          "note" : "HbA1c",
+          "pageIndex" : 2,
+          "text" : "7,4 %"
+        }
+      ],
+      "notes" : "Gemischtes PDF: Textseiten (0 und 2) und eine reine Scanseite (1, 200 dpi Graustufen).",
+      "pageCount" : 3,
+      "pageRotations" : [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F07-versteckt.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "channel" : "invisibleText",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-01",
+          "manualOnly" : false,
+          "note" : "Textebene mit Render-Modus 3 (unsichtbar).",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 60,
+              "y" : 497.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "insuranceNumber",
+          "channel" : "invisibleText",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-02",
+          "manualOnly" : false,
+          "note" : "Weiß auf weiß.",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.4,
+              "x" : 60,
+              "y" : 467.47
+            }
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "name",
+          "channel" : "metadata",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-03",
+          "manualOnly" : false,
+          "note" : "Title\/Subject\/Keywords des Dokument-Info-Dicts: „Arztbrief Erika Mustermann …“, „Patientin Erika Mustermann, KV-Nr. X123456789“.",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "insuranceNumber",
+          "channel" : "metadata",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-04",
+          "manualOnly" : false,
+          "note" : "Subject\/Keywords: „KV-Nr. X123456789“ bzw. „X123456789“.",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "name",
+          "channel" : "form",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-05",
+          "manualOnly" : false,
+          "note" : "AcroForm-Textfeld (versteckt, \/F bit 2), \/V = Erika Mustermann.",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 18,
+              "width" : 200,
+              "x" : 60,
+              "y" : 560
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "insuranceNumber",
+          "channel" : "annotation",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-06",
+          "manualOnly" : false,
+          "note" : "Text-Annotation (Notiz) mit Inhalt „KV-Nr. X123456789 …“.",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 20,
+              "width" : 20,
+              "x" : 500,
+              "y" : 640
+            }
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "name",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-07",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-08",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "address",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-09",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "Musterstraße 5, 12345 Musterstadt"
+        },
+        {
+          "category" : "insuranceNumber",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-10",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "X123456789"
+        },
+        {
+          "category" : "phone",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-11",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "+49 30 1234567"
+        },
+        {
+          "category" : "email",
+          "channel" : "attachment",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : true,
+          "id" : "F07-12",
+          "manualOnly" : false,
+          "note" : "patientendaten.txt",
+          "pageIndex" : 0,
+          "rects" : [
+
+          ],
+          "text" : "erika.mustermann@example.org"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "HbA1c",
+          "pageIndex" : 0,
+          "text" : "7,2 %"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "text" : "128\/78 mmHg"
+        },
+        {
+          "note" : "Kreatinin",
+          "pageIndex" : 0,
+          "text" : "0,9 mg\/dl"
+        },
+        {
+          "note" : "negativer Base Excess",
+          "pageIndex" : 0,
+          "text" : "-1,8 mmol\/l"
+        },
+        {
+          "note" : "klinische Empfehlung",
+          "pageIndex" : 0,
+          "text" : "Kontrolle ist in vier Wochen geplant"
+        }
+      ],
+      "notes" : "Versteckte Identifikatoren in fünf Nebenkanälen: unsichtbare Textebene (Render-Modus 3), Weiß-auf-Weiß, Dokument-Info (Title\/Subject\/Keywords), AcroForm-Textfeld, Text-Annotation und eingebetteter Dateianhang (\/Names \/EmbeddedFiles, als rohes PDF angehängt). Keine sichtbaren Identifikatoren im Seiteninhalt.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F08-schlechter-scan.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : true,
+          "hidden" : false,
+          "id" : "F08-01",
+          "manualOnly" : false,
+          "note" : "Label „Patient“ links, Wert weit rechts – Zuordnung Label↔Wert ist ein erkennbares Mapping-Problem.",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 81.14,
+              "x" : 390,
+              "y" : 733.7
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F08-02",
+          "manualOnly" : false,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 10,
+              "width" : 50.05,
+              "x" : 390,
+              "y" : 713.7
+            }
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : true,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F08-03",
+          "manualOnly" : false,
+          "note" : "Handschriftlich-artig (Zapfino) auf schlechtem Scan – OCR wird mit hoher Wahrscheinlichkeit falsch.",
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 50.66,
+              "width" : 135.71,
+              "x" : 190,
+              "y" : 295.46
+            }
+          ],
+          "text" : "X123456789"
+        }
+      ],
+      "kind" : "scan",
+      "mustPreserve" : [
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 10,
+            "width" : 30.59,
+            "x" : 114.47,
+            "y" : 655.7
+          },
+          "text" : "RR 142\/86 mmHg"
+        },
+        {
+          "note" : "Laborwert",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 10,
+            "width" : 13.9,
+            "x" : 215.63,
+            "y" : 655.7
+          },
+          "text" : "HbA1c 7,8 %"
+        },
+        {
+          "note" : "Dosierung und Schema",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 10,
+            "width" : 44.45,
+            "x" : 105.02,
+            "y" : 637.7
+          },
+          "text" : "Metformin 500 mg 1-0-1"
+        },
+        {
+          "note" : "Diagnose",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 10,
+            "width" : 39.47,
+            "x" : 390,
+            "y" : 693.7
+          },
+          "text" : "Diabetes mellitus Typ 2"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 0,
+          "rect" : {
+            "height" : 9,
+            "width" : 45.04,
+            "x" : 139.52,
+            "y" : 769.93
+          },
+          "text" : "05.02.2026"
+        }
+      ],
+      "notes" : "Absichtlich schlechter Scan (~100 dpi, Rauschen, Unschärfe, leichte Schräglage), damit OCR unsicher ist. KV-Nr. handschriftlich-artig (expectOCRUncertain). Label und Wert der Namenszeile liegen weit auseinander (expectedMappingProblem).",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F09-ohne-identifikatoren.pdf",
+      "identifiers" : [
+
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "note" : "klinisches Datum – darf nicht geschwärzt werden",
+          "pageIndex" : 0,
+          "text" : "05.01.2026"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 0,
+          "text" : "02.02.2026"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "7,8 %"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "7,2 %"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "7,0 %"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "0,9 mg\/dl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "0,8 mg\/dl"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "142\/86 mmHg"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "128\/78 mmHg"
+        },
+        {
+          "note" : "negativer Wert",
+          "pageIndex" : 0,
+          "text" : "-2,4 mmol\/l"
+        }
+      ],
+      "notes" : "Fehlalarmkontrolle: nur klinische Zahlen und Datumsangaben, keine direkten Identifikatoren. Erwartet: keine Fundstellen. Die Dokument-Nr. ist eine Vorgangsnummer und keine Personenkennung.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "damaged",
+      "file" : "F10a-beschaedigt.pdf",
+      "identifiers" : [
+
+      ],
+      "kind" : "invalid",
+      "mustPreserve" : [
+
+      ],
+      "notes" : "Absichtlich beschädigt: Der bytestream wurde bei ca. 50 % abgeschnitten (kein %%EOF, kein vollständiges xref). pageCount bezeichnet das Originaldokument (2 Seiten). Erwartetes Verhalten: Eingabe wird als beschädigt erkannt, nicht als erfolgreich verarbeitet markiert; PDFKit kann die Datei nicht öffnen.",
+      "pageCount" : 2,
+      "pageRotations" : [
+        0,
+        0
+      ]
+    },
+    {
+      "expectedInputOutcome" : "encrypted",
+      "file" : "F10b-verschluesselt.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F10b-01",
+          "manualOnly" : false,
+          "note" : "nach Entschlüsselung auffindbar",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 108.92,
+              "y" : 749.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F10b-02",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.4,
+              "x" : 97.91,
+              "y" : 733.47
+            }
+          ],
+          "text" : "X123456789"
+        }
+      ],
+      "kind" : "invalid",
+      "mustPreserve" : [
+        {
+          "note" : "HbA1c",
+          "pageIndex" : 0,
+          "text" : "7,2 %"
+        },
+        {
+          "note" : "Blutdruck",
+          "pageIndex" : 0,
+          "text" : "128\/78 mmHg"
+        },
+        {
+          "note" : "Verneinung",
+          "pageIndex" : 0,
+          "text" : "Keine Hypoglykämie"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 0,
+          "text" : "05.02.2026"
+        }
+      ],
+      "notes" : "Passwortverschlüsseltes PDF (Benutzerpasswort „test“, Eigentümerpasswort „fixture-owner“, via PDFKit geschrieben). Erwartetes Verhalten: als verschlüsselt erkannt, Entschlüsselung nur mit Passwort.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ],
+      "password" : "test"
+    },
+    {
+      "expectedInputOutcome" : "ok",
+      "file" : "F10c-manipulativ.pdf",
+      "identifiers" : [
+        {
+          "category" : "name",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F10c-01",
+          "manualOnly" : false,
+          "note" : "trotz manipulativer Anweisung auffindbar",
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 89.25,
+              "x" : 125.43,
+              "y" : 719.47
+            }
+          ],
+          "text" : "Erika Mustermann"
+        },
+        {
+          "category" : "birthDate",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F10c-02",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 55.05,
+              "x" : 245.86,
+              "y" : 719.47
+            }
+          ],
+          "text" : "12.03.1967"
+        },
+        {
+          "category" : "insuranceNumber",
+          "expectOCRUncertain" : false,
+          "expectedMappingProblem" : false,
+          "hidden" : false,
+          "id" : "F10c-03",
+          "manualOnly" : false,
+          "occurrence" : 0,
+          "pageIndex" : 0,
+          "rects" : [
+            {
+              "height" : 11,
+              "width" : 62.4,
+              "x" : 94.85,
+              "y" : 704.47
+            }
+          ],
+          "text" : "X123456789"
+        }
+      ],
+      "kind" : "text",
+      "mustPreserve" : [
+        {
+          "pageIndex" : 0,
+          "text" : "142\/86 mmHg"
+        },
+        {
+          "pageIndex" : 0,
+          "text" : "7,8 %"
+        },
+        {
+          "note" : "klinisches Datum",
+          "pageIndex" : 0,
+          "text" : "05.02.2026"
+        }
+      ],
+      "notes" : "Prompt-Injection-Fixture: Der Absatz „SYSTEM: …“ ist Dateninhalt und darf keine Werkzeug- oder Upload-Aktion auslösen. Der echte Identifikator im selben Dokument muss trotzdem gefunden werden.",
+      "pageCount" : 1,
+      "pageRotations" : [
+        0
+      ]
+    }
+  ],
+  "generator" : "pv-fixtures",
+  "policy" : {
+    "annotationSpace" : "Unrotated mediaBox page space, Punkt, Ursprung unten links (PageRect-Konvention aus PaperVeilCore).",
+    "clinicAndPhysicianDataIsIdentifier" : false,
+    "footer" : "SYNTHETISCHES TESTDOKUMENT – fiktive Daten",
+    "patientDataIsIdentifier" : true,
+    "statement" : "Alle Personen, Adressen, Telefonnummern, KV-Nummern, E-Mail-Adressen und Institutionen in diesem Testsatz sind frei erfunden („Mustermann“-Platzhalter). Es liegen keine echten Befunde oder Patientendaten vor."
+  },
+  "schemaVersion" : 1
+}
