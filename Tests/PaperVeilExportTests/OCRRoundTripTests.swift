@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import PaperVeilExtraction
 import Vision
 @testable import PaperVeilExport
 
@@ -40,7 +41,7 @@ enum OCR {
         request.recognitionLevel = .accurate
         request.recognitionLanguages = [Locale.Language(identifier: "de-DE")]
         request.usesLanguageCorrection = false
-        let observations = try await request.perform(on: image)
+        let observations = try await OCRCompute.perform(request, on: image)
         return observations
             .map { $0.topCandidates(1).first?.string ?? "" }
             .joined(separator: "\n")

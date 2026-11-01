@@ -1,3 +1,4 @@
+import CoreML
 import CoreGraphics
 import Foundation
 import PDFKit
@@ -39,7 +40,7 @@ public struct OCRExtractor: Sendable {
         request.automaticallyDetectsLanguage = false
         request.usesLanguageCorrection = false
 
-        let observations = try await request.perform(on: image)
+        let observations = try await OCRCompute.perform(request, on: image)
 
         // Collect line data first (normalized, displayed space), then bring the
         // lines into reading order before assigning line numbers.
@@ -175,5 +176,30 @@ public struct OCRExtractor: Sendable {
 private extension Double {
     func clamped(to range: ClosedRange<Double>) -> Double {
         Swift.min(Swift.max(self, range.lowerBound), range.upperBound)
+    }
+}
+
+/// Runs Vision on the default (Neural Engine/GPU) path and falls back to the CPU
+/// if that path is unavailable, e.g. in virtualised CI runners without an ANE.
+/// `PAPERVEIL_OCR_CPU_ONLY=1` forces the CPU path.
+public enum OCRCompute {
+    public static func perform(_ request: RecognizeTextRequest, on image: CGImage) async throws -> [RecognizedTextObservation] {
+        if ProcessInfo.processInfo.environment["PAPERVEIL_OCR_CPU_ONLY"] == "1" {
+            return try await cpuOnly(request).perform(on: image)
+        }
+        do {
+            return try await request.perform(on: image)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            return try await cpuOnly(request).perform(on: image)
+        }
+    }
+
+    static func cpuOnly(_ request: RecognizeTextRequest) -> RecognizeTextRequest {
+        var r = request
+        let cpu = MLComputeDevice.allComputeDevices.first { if case .cpu = $0 { true } else { false } }
+        for stage in r.supportedComputeStageDevices.keys { r.setComputeDevice(cpu, for: stage) }
+        return r
     }
 }

@@ -19,6 +19,9 @@ jobs:
     # Never use *-xlarge / larger runners here (paid).
     runs-on: xcode-27
     timeout-minutes: 45
+    env:
+      # Virtualised runners have no Neural Engine; Vision would fail to compile its model.
+      PAPERVEIL_OCR_CPU_ONLY: "1"
     steps:
       - uses: actions/checkout@v7
         with:
