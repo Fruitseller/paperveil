@@ -5,7 +5,7 @@ import PaperVeilCore
 extension Duration {
     /// Total duration in seconds (for latency reports).
     var secondsValue: Double {
-        Double(components.seconds) + Double(components.attoseconds) / 1e9
+        Double(components.seconds) + Double(components.attoseconds) / 1e18
     }
 }
 
