@@ -2,6 +2,7 @@ import Foundation
 import PaperVeilCore
 import PaperVeilDetection
 import PaperVeilPipeline
+import PaperVeilTransfer
 
 struct ProcessOutput: Sendable {
     var pageCount: Int
@@ -71,9 +72,26 @@ struct Engine: Sendable {
         }
     }
 
-    func transfer(job: Job) async -> Result<TransferOutcome, Error> {
-        .failure(CancellationError()) // wired after transfer module lands
+    var knownHosts: KnownHostsStore { KnownHostsStore(fileURL: KnownHostsStore.defaultFileURL(paths: paths)) }
+
+    func transfer(job: Job, config: TransferConfiguration?) async -> Result<TransferOutcome, Error> {
+        guard let config else { return .failure(TransferSetupError.notConfigured) }
+        guard let export = job.currentExport else { return .failure(JobError.staleExport) }
+        do {
+            let url = paths.workDir(for: job.id).appendingPathComponent(export.fileName)
+            let r = try await TransferService(paths: paths).transfer(job: job, exportURL: url, config: config)
+            return .success(TransferOutcome(remoteName: r.remoteName, sha256: r.remoteSHA256))
+        } catch {
+            return .failure(error)
+        }
     }
 
-    func deleteSecrets() throws {}
+    func deleteSecrets() throws {
+        try? KeychainStore().delete(account: "transfer")
+    }
+}
+
+enum TransferSetupError: Error, CustomStringConvertible {
+    case notConfigured
+    var description: String { "Kein Übertragungsziel konfiguriert (Einstellungen → Übertragung)." }
 }

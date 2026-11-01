@@ -1,5 +1,6 @@
 import PaperVeilCore
 import PaperVeilDetection
+import PaperVeilTransfer
 import SwiftUI
 
 struct SettingsView: View {
@@ -124,5 +125,66 @@ struct DataSettingsView: View {
 }
 
 struct TransferSettingsView: View {
-    var body: some View { Text("Übertragung: wird konfiguriert, sobald das Transfermodul integriert ist.") }
+    @Environment(AppModel.self) private var model
+    @State private var host = ""
+    @State private var port = 22
+    @State private var user = ""
+    @State private var identity = ""
+    @State private var fetched: HostKey?
+    @State private var pinned: [String] = []
+    @State private var message: String?
+
+    var body: some View {
+        Form {
+            Text("Übertragen werden nur freigegebene, bereinigte Exporte per SSH an ein Empfangsskript "
+                 + "(receiver/paperveil-receive) als forced command. Keine Standardziele; private Hostnamen gehören nicht ins Repository.")
+                .font(.caption).foregroundStyle(.secondary)
+            TextField("Host", text: $host)
+            TextField("Port", value: $port, format: .number.grouping(.never))
+            TextField("Benutzer", text: $user)
+            TextField("SSH-Schlüsseldatei (optional, z. B. ~/.ssh/paperveil_ed25519)", text: $identity)
+            HStack {
+                Button("Speichern") {
+                    model.settings.transfer = host.isEmpty ? nil : TransferConfiguration(
+                        host: host, port: port, user: user,
+                        identityFilePath: identity.isEmpty ? nil : (identity as NSString).expandingTildeInPath)
+                    message = "Gespeichert."
+                }
+                Button("Hostschlüssel abrufen") { Task { await fetch() } }.disabled(host.isEmpty)
+            }
+            if let fetched {
+                VStack(alignment: .leading) {
+                    Text("Abgerufener Schlüssel (\(fetched.keyType)):")
+                    Text(fetched.fingerprint).font(.body.monospaced()).textSelection(.enabled)
+                    Text("Vergleiche den Fingerabdruck über einen unabhängigen Kanal mit dem Server "
+                         + "(ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub). Nur bei Übereinstimmung bestätigen.")
+                        .font(.caption).foregroundStyle(.secondary)
+                    Button("Fingerabdruck stimmt – Schlüssel festlegen") { pin(fetched) }
+                }
+            }
+            LabeledContent("Festgelegte Hostschlüssel", value: "\(pinned.count)")
+            Button("Festgelegte Hostschlüssel entfernen", role: .destructive) {
+                try? model.engine.knownHosts.clear(); reload()
+            }
+            if let message { Text(message).font(.caption) }
+        }
+        .onAppear {
+            if let t = model.settings.transfer {
+                host = t.host; port = t.port; user = t.user; identity = t.identityFilePath ?? ""
+            }
+            reload()
+        }
+    }
+
+    private func reload() { pinned = (try? model.engine.knownHosts.pinnedLines()) ?? [] }
+
+    private func fetch() async {
+        do { fetched = try await model.engine.knownHosts.fetchHostKey(host: host, port: port); message = nil }
+        catch { message = AppModel.describe(error) }
+    }
+
+    private func pin(_ key: HostKey) {
+        do { try model.engine.knownHosts.pin(key, confirmedFingerprint: key.fingerprint); fetched = nil; reload(); message = "Hostschlüssel festgelegt." }
+        catch { message = AppModel.describe(error) }
+    }
 }
