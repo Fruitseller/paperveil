@@ -1,123 +1,71 @@
-# PaperVeil receiver (`paperveil-receive`)
+# PaperVeil-Empfänger (`paperveil-receive`)
 
-Server-side counterpart of PaperVeil's transfer module. It is a small POSIX `sh`
-script (works on Linux and macOS) that receives **sanitized** export PDFs over
-SSH and stores them in an inbox directory — atomically, verified, without
-overwriting existing files and without ever writing outside the inbox.
+Kleines POSIX-`sh`-Skript für den Server, auf Linux und macOS lauffähig. Es nimmt die
+bereinigten Export-PDFs per SSH entgegen und legt sie in einem Eingangsordner ab. Dabei prüft
+es die Prüfsumme, schreibt atomar, überschreibt nichts und schreibt nie außerhalb des Ordners.
 
-It is deliberately simple: no SFTP server, no library, no daemon. It runs as an
-SSH **forced command**, so the connecting key can do exactly one thing: upload
-a file with a neutral `PV-…-r…\.pdf` name.
+## Einrichtung
 
-## Protocol
+Das Skript läuft in deinem normalen Benutzer, aber **nie als root**. Die Einschränkung hängt
+an einem eigenen SSH-Schlüssel nur für PaperVeil, nicht am Benutzer.
 
-The client invokes:
+1. **Schlüssel auf dem Mac erzeugen** und in PaperVeil unter *Einstellungen → Übertragung* als
+   SSH-Schlüsseldatei eintragen:
 
-```sh
-ssh -o BatchMode=yes … user@host put <name> <sha256> <size>
-```
+   ```sh
+   ssh-keygen -t ed25519 -f ~/.ssh/paperveil -C paperveil
+   ```
 
-and streams exactly `<size>` bytes to stdin. Constraints:
+2. **Auf dem Server** Skript und Eingangsordner anlegen:
 
-- `SSH_ORIGINAL_COMMAND` must be exactly `put <name> <sha256> <size>`.
-- `<name>` must fully match `PV-[A-F0-9]{8}-r[0-9]{1,6}\.pdf` (neutral document
-  ID + export revision). Anything else — including `/`, `..`, lowercase — is
-  rejected with `ERR NAME`.
-- `<sha256>` is the lowercase hex SHA-256 of the streamed bytes; `<size>` a
-  non-negative integer.
+   ```sh
+   mkdir -p ~/paperveil-inbox && chmod 700 ~/paperveil-inbox
+   sudo install -m 755 paperveil-receive /usr/local/bin/paperveil-receive
+   ```
 
-Behavior:
+3. **In `~/.ssh/authorized_keys` auf dem Server** den öffentlichen Schlüssel
+   (`~/.ssh/paperveil.pub`) mit Einschränkung eintragen. Der Pfad zum Eingangsordner muss
+   absolut sein:
 
-1. Exactly `<size>` bytes are read from stdin into a temp file inside
-   `<inbox>/.incoming/` (created with `mktemp`). Fewer bytes (interrupted
-   upload) ⇒ `ERR SIZE`, no final file.
-2. SHA-256 of the received bytes must equal `<sha256>`, otherwise
-   `ERR CHECKSUM`, no final file.
-3. The temp file is fsynced where possible (GNU coreutils `sync -d`; a no-op
-   elsewhere) and finalised atomically via `ln tmp final`. `ln` fails if the
-   target exists, so an existing file is **never** overwritten or truncated.
-4. If the final file already exists: identical hash ⇒ idempotent success
-   (`OK …`); different hash ⇒ `ERR EXISTS`. Retries never create uncontrolled
-   duplicates.
-5. On every error the temp file is removed and the script exits non-zero.
+   ```
+   command="/usr/local/bin/paperveil-receive /home/DEIN-NAME/paperveil-inbox",restrict ssh-ed25519 AAAA… paperveil
+   ```
 
-Output (single line on stdout): `OK <name> <sha256>` on success,
-`ERR <code> <message>` on failure. Error codes: `USAGE`, `NAME`, `SIZE`,
-`CHECKSUM`, `TMP`, `WRITE`, `IO`, `EXISTS`, `FINALIZE`.
+   Mit diesem Schlüssel lässt sich nur das Skript ausführen: keine Shell, kein SFTP, keine
+   Weiterleitung. Deine übrigen Schlüssel behalten ihren normalen Zugriff.
 
-## Installation
+4. **In PaperVeil** als Host die Tailscale-Adresse des Servers eintragen (`100.x.y.z` oder
+   den MagicDNS-Namen), dazu deinen Benutzernamen. Dann *Hostschlüssel abrufen* und den
+   Fingerabdruck mit `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` auf dem Server
+   vergleichen.
 
-On the receiving server (example paths; adjust to taste):
+### Tailscale
 
-```sh
-# 1. dedicated, unprivileged user — never root, never a shared login
-sudo useradd --create-home --shell /usr/sbin/nologin paperveil
+- **Tailscale SSH muss auf dem Server aus sein** (`tailscale set --ssh=false`). Ist es an,
+  beantwortet Tailscale SSH-Verbindungen auf Port 22 selbst, ohne `authorized_keys` zu
+  lesen. Die `command=…,restrict`-Zeile wäre dann wirkungslos. Willst du Tailscale SSH
+  behalten, lass PaperVeil einen zweiten `sshd`-Port nutzen, etwa 2222. Auf diesem Port
+  gilt `authorized_keys` wieder.
+- **Empfehlung:** Eine Regel in den Tailscale-Zugriffsregeln, die dem Mac auf dem Server nur
+  den SSH-Port erlaubt.
 
-# 2. inbox owned by that user
-sudo mkdir -p /srv/paperveil/inbox
-sudo chown paperveil:paperveil /srv/paperveil/inbox
-sudo chmod 700 /srv/paperveil/inbox
+## Ablauf und Grenzen
 
-# 3. install the script
-sudo install -o root -m 755 paperveil-receive /usr/local/bin/paperveil-receive
+PaperVeil ruft `ssh … -- put <Name> <SHA-256> <Größe>` auf und sendet die Datei. Das Skript
+nimmt nur Namen der Form `PV-XXXXXXXX-rN.pdf` an und schreibt zuerst in eine temporäre Datei
+im Eingangsordner. Danach prüft es Größe und SHA-256 und legt die Datei erst dann unter ihrem
+Namen ab. Antwort: `OK <Name> <SHA-256>` oder `ERR <Code> <Meldung>`.
 
-# 4. forced command in the client's authorized_keys entry (~paperveil/.ssh/authorized_keys)
-command="/usr/local/bin/paperveil-receive /srv/paperveil/inbox",restrict ssh-ed25519 AAAAC3NzaC1… paperveil
-```
-
-`restrict` disables pty allocation, port forwarding, X11, agent forwarding and
-user execution: the key can only run the forced command. `authorized_keys`
-must be owned by the receiver user, its `.ssh` directory and the file `700`/`600`.
-
-The key pair is generated on the Mac (never stored in the repository) with
-`ssh-keygen -t ed25519`; the private key stays in the user's `~/.ssh` (or a path
-configured in PaperVeil as *identity file*).
-
-## Server identity on the client side
-
-PaperVeil always invokes the system OpenSSH client as:
-
-```
-/usr/bin/ssh
-  -o StrictHostKeyChecking=yes
-  -o UserKnownHostsFile=<app-managed known_hosts>
-  -o GlobalKnownHostsFile=/dev/null
-  -o BatchMode=yes
-  -o IdentitiesOnly=yes
-  [-i <identity file>] -p <port> user@host -- put <name> <sha256> <size>
-```
-
-The app-managed `known_hosts` file starts empty. Before the first transfer the
-app fetches the server's ed25519 key with `ssh-keyscan` and shows its
-`SHA256:…` fingerprint; the key is only written (pinned) after the user
-explicitly confirms that fingerprint out-of-band. An unknown or changed host
-key therefore fails the connection — it is never silently accepted — and is
-reported as a host-key error, not as a generic network failure.
-
-## Security boundaries and limits
-
-- **The forced command is the upload boundary.** `paperveil-receive` itself
-  only writes inside `<inbox>`; the name check rejects traversal before any
-  path is built. A working integration test (write attempt outside the inbox)
-  is part of `test-receiver.sh`.
-- **A Hermes profile (or any other device-management profile) is not a
-  security boundary** for this upload path. Profiles restrict the Mac; they do
-  not authenticate the server or limit the receiving account. Authorization is
-  enforced server-side by `command=…,restrict`, file ownership and, optionally,
-  the hardening below.
-- The receiver user must not be able to write anywhere it should not
-  (chown of the inbox is the minimum). Consider, where the platform allows:
-  - `ChrootDirectory` in `sshd_config` for the receiver user (the chroot path
-    and all parents must be root-owned; the inbox lives inside), or
-  - ACLs / a dedicated filesystem for the inbox, and
-  - rate/traffic limits in `sshd_config` (`MaxSessions`, `MaxStartups`),
-  - server-side log retention for `sshd` (the protocol output is neutral).
-- PaperVeil only uploads **approved, sanitized exports** (never originals,
-  blocklists or re-identification data — see `docs/ZIELZUSTAND.md` D02). The
-  manifest information travels in the `put` command itself: neutral document
-  ID, revision, SHA-256, byte count.
-- If the connection drops mid-upload the receiver sees a short read and
-  discards the temp file; nothing partial is ever finalised.
+- **Abbruch oder falsche Prüfsumme:** Es entsteht keine Datei.
+- **Gleiche Datei erneut:** Das Skript meldet `OK` und legt kein Duplikat an.
+- **Gleicher Name, anderer Inhalt:** `ERR EXISTS`, nichts wird überschrieben.
+- **Grenze des Schlüssels:** Das Skript schreibt nur in den angegebenen Ordner, die
+  Namensprüfung blockiert `..` und `/`. Hätte es einen Fehler, wären die Dateien deines
+  Benutzers betroffen. Das ist das Restrisiko dieses einfachen Aufbaus.
+- **Kein Ersatz:** Ein Geräteprofil auf dem Mac (z. B. Hermes) ist keine Sicherheitsgrenze.
+  Die Grenze setzt der Server durch, über `command=…,restrict`.
+- **Was übertragen wird:** nur freigegebene, bereinigte Exporte. Originale, Sperrlisten und
+  Fundstellen werden nie übertragen.
 
 ## Tests
 
@@ -125,7 +73,13 @@ reported as a host-key error, not as a generic network failure.
 sh receiver/test-receiver.sh
 ```
 
-runs the script locally (simulating sshd by setting `SSH_ORIGINAL_COMMAND`) on
-macOS and Ubuntu and covers: success, idempotent retry, same-name-different-content
-rejection, checksum mismatch, truncated upload, invalid/traversal names,
-protocol violations and non-writable inbox (skipped when run as root).
+Die Tests laufen lokal auf macOS und Linux und decken ab:
+
+- erfolgreiche Übertragung und Wiederholung,
+- gleicher Name mit anderem Inhalt,
+- falsche Prüfsumme und abgebrochene Übertragung,
+- ungültige Namen und Ausbruchsversuche,
+- fehlende Schreibrechte.
+
+Echte SSH-Verbindungen, Hostschlüssel und Forced Command prüft `Tests/PaperVeilPipelineTests`
+gegen einen lokalen `sshd`.
