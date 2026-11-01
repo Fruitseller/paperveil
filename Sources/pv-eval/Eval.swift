@@ -332,3 +332,10 @@ func mapWithLimit<Input: Sendable, Output: Sendable>(
     }
     return results.compactMap { $0 }
 }
+
+/// Path relative to the current directory when possible, so public reports carry no local home paths.
+func EvalDisplayPath(_ url: URL) -> String {
+    let cwd = FileManager.default.currentDirectoryPath + "/"
+    let p = url.standardizedFileURL.path
+    return p.hasPrefix(cwd) ? String(p.dropFirst(cwd.count)) : url.lastPathComponent
+}

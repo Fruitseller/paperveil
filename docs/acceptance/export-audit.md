@@ -4,7 +4,7 @@
 - **Git-Commit:** `8cbaf8783dba9c2a8c0134ad352be329a96edadf`
 - **Betriebssystem:** macOS Version 27.2 (Build 26B123)
 - **Werkzeugkette:** Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)
-- **Testsatz:** /Users/piotr/git/paperveil/Fixtures/synthetic – Schema-Version 1
+- **Testsatz:** Fixtures/synthetic – Schema-Version 1
 - **Arbeitsverzeichnis:** /var/folders/rt/f7w03_vd4b52gwc_kr2fdff40000gr/T/pv-eval-export-audit-7D3479D9
 - **Raster-Auflösung:** 300 dpi
 

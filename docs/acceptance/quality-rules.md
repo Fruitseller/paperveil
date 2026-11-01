@@ -4,8 +4,8 @@
 - **Git-Commit:** `8cbaf8783dba9c2a8c0134ad352be329a96edadf`
 - **Betriebssystem:** macOS Version 27.2 (Build 26B123)
 - **Werkzeugkette:** Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)
-- **Testsatz:** /Users/piotr/git/paperveil/Fixtures/synthetic – Schema-Version 1, Generator pv-fixtures, logisches Fixturedatum 2026-02-05
-- **Sperrliste:** `/Users/piotr/git/paperveil/Fixtures/synthetic/blocklist.json` – 19 fiktive Einträge
+- **Testsatz:** Fixtures/synthetic – Schema-Version 1, Generator pv-fixtures, logisches Fixturedatum 2026-02-05
+- **Sperrliste:** `Fixtures/synthetic/blocklist.json` – 19 fiktive Einträge
 - **LLM:** nicht ausgeführt (kein `--llm-model` angegeben)
 
 > **Ergebnisse gelten nur für diesen synthetischen Testsatz und sind keine allgemeine Erkennungsquote.**
