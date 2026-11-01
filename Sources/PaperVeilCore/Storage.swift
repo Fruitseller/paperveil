@@ -9,6 +9,10 @@ public struct AppPaths: Sendable {
     public let root: URL
     public init(root: URL) { self.root = root }
     public static func `default`() -> AppPaths {
+        // Test/acceptance override, e.g. PAPERVEIL_DATA_DIR=/tmp/pv-acceptance
+        if let custom = ProcessInfo.processInfo.environment["PAPERVEIL_DATA_DIR"], !custom.isEmpty {
+            return AppPaths(root: URL(fileURLWithPath: custom, isDirectory: true))
+        }
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return AppPaths(root: base.appendingPathComponent("PaperVeil", isDirectory: true))
     }
