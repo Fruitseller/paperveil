@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import PaperVeilCore
+import PaperVeilTransfer
 import os
 
 /// Non-secret settings, persisted locally as JSON.
@@ -11,6 +12,7 @@ struct AppSettings: Codable, Equatable {
     var llmTimeoutSeconds = 180.0
     var exportDPI = 300.0
     var maxConcurrentJobs = 2
+    var transfer: TransferConfiguration? = nil
 }
 
 @MainActor @Observable
@@ -179,10 +181,10 @@ final class AppModel {
     func transfer(_ id: DocumentID) {
         guard let job = job(id), running[id] == nil else { return }
         guard job.isApprovedForTransfer else { lastError = JobError.notApproved.description; return }
-        let engine = engine
+        let engine = engine, settings = settings
         update(id) { $0.transfer = .inProgress(revision: job.revision) }
         running[id] = Task { [weak self] in
-            let result = await engine.transfer(job: job)
+            let result = await engine.transfer(job: job, config: settings.transfer)
             await MainActor.run {
                 guard let self else { return }
                 self.running[id] = nil
