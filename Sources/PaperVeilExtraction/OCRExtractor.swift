@@ -187,9 +187,6 @@ public enum OCRCompute {
         var attempts: [RecognizeTextRequest] = []
         if ProcessInfo.processInfo.environment["PAPERVEIL_OCR_CPU_ONLY"] != "1" { attempts.append(request) }
         attempts.append(cpuOnly(request))
-        var fast = cpuOnly(request)
-        fast.recognitionLevel = .fast
-        attempts.append(fast)
         var lastError: Error = CancellationError()
         for attempt in attempts {
             do {
