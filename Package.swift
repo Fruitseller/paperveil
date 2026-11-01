@@ -32,7 +32,7 @@ let package = Package(
         .testTarget(name: "PaperVeilExtractionTests", dependencies: ["PaperVeilExtraction"]),
         .testTarget(name: "PaperVeilDetectionTests", dependencies: ["PaperVeilDetection"]),
         .testTarget(name: "PaperVeilExportTests", dependencies: ["PaperVeilExport", "PaperVeilExtraction"]),
-        .testTarget(name: "PaperVeilPipelineTests", dependencies: ["PaperVeilPipeline"]),
+        .testTarget(name: "PaperVeilPipelineTests", dependencies: ["PaperVeilPipeline", "PaperVeilTransfer", "PaperVeilDetection"]),
         .testTarget(name: "PaperVeilTransferTests", dependencies: ["PaperVeilTransfer"]),
     ],
     swiftLanguageModes: [.v6]

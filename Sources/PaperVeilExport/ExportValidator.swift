@@ -137,8 +137,17 @@ public enum ExportValidator {
             }
         }
         let leaks = originalValues.filter { $0.count >= 4 }
+        // Creator and Producer are fully pinned (our constant / the system's Quartz producer
+        // string), so they cannot carry original content even if the original used the same values.
+        if let creator = exportStructure.infoDictionary["Creator"], creator != "PaperVeil" {
+            fail("Metadatenwert „Creator“ ist nicht neutral.")
+        }
+        if let producer = exportStructure.infoDictionary["Producer"],
+           producer.wholeMatch(of: /macOS Version [0-9.]+ \(Build [0-9A-Za-z]+\) Quartz PDFContext/) == nil {
+            fail("Metadatenwert „Producer“ ist nicht der erwartete System-Producer.")
+        }
         for (key, value) in exportStructure.infoDictionary
-        where !dateKeys.contains(key) && leaks.contains(where: value.contains) {
+        where !dateKeys.contains(key) && key != "Creator" && key != "Producer" && leaks.contains(where: value.contains) {
             fail("Metadatenwert „\(key)“ enthält Daten aus dem Original.")
         }
 
