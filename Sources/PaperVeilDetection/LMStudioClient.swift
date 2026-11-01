@@ -60,7 +60,7 @@ public enum LMStudioStatus: Equatable, Sendable {
 /// - Responses of reasoning models (a `reasoning_content` channel or inline "think" blocks inside `content`) are reduced to the final JSON before parsing.
 ///   blocks inside `content`) are reduced to the final JSON before parsing.
 public final class LMStudioClient: Sendable {
-    public static let subsystem = "com.paperveil.PaperVeil"
+    public static let subsystem = "de.paperveil.app"
     private static let logger = Logger(subsystem: subsystem, category: "LMStudioClient")
 
     private let endpoint: LMStudioEndpoint
