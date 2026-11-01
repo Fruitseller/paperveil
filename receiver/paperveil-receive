@@ -1,0 +1,118 @@
+#!/bin/sh
+#
+# paperveil-receive -- server-side receiver for sanitized PaperVeil exports.
+#
+# Installation: SSH forced command of a dedicated, unprivileged user
+# (see receiver/README.md):
+#
+#   command="/usr/local/bin/paperveil-receive /srv/paperveil/inbox",restrict \
+#       ssh-ed25519 AAAAC3NzaC1... paperveil
+#
+# Protocol: the client runs
+#     ssh ... user@host put <name> <sha256> <size>
+# and streams exactly <size> bytes to stdin. This script (portable POSIX sh,
+# Linux and macOS) reads those bytes into a temp file inside <inbox>/.incoming/,
+# verifies size and SHA-256 and finalises atomically without clobbering
+# existing files. It can only ever write inside <inbox>.
+#
+# Output on stdout, single line:
+#     OK <name> <sha256>    on success (also for an idempotent retry), exit 0
+#     ERR <code> <message>  on any error, exit 1
+#
+# Error codes: USAGE, NAME, SIZE, CHECKSUM, TMP, WRITE, IO, EXISTS, FINALIZE.
+
+set -u
+set -f   # SSH_ORIGINAL_COMMAND is split into words, never glob-expanded
+
+fail() {
+    printf 'ERR %s %s\n' "$1" "$2"
+    exit 1
+}
+
+inbox=${1:-}
+[ -n "$inbox" ] || fail USAGE "usage: paperveil-receive <inbox>"
+[ -d "$inbox" ] || fail USAGE "inbox is not a directory: $inbox"
+
+# --- parse SSH_ORIGINAL_COMMAND: exactly "put <name> <sha256> <size>" -------
+cmd=${SSH_ORIGINAL_COMMAND:-}
+set -- $cmd
+[ "$#" -eq 4 ] || fail USAGE "expected: put <name> <sha256> <size>"
+[ "$1" = "put" ] || fail USAGE "expected: put <name> <sha256> <size>"
+name=$2
+sha=$3
+size=$4
+
+# --- name must be exactly PV-<8 uppercase hex>-r<1..6 digits>.pdf -----------
+# A full match rejects everything else, including '/', '..' and lowercase.
+case $name in
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9].pdf) ;;
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9][0-9].pdf) ;;
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9][0-9][0-9].pdf) ;;
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9][0-9][0-9][0-9].pdf) ;;
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9][0-9][0-9][0-9][0-9].pdf) ;;
+PV-[A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9][A-F0-9]-r[0-9][0-9][0-9][0-9][0-9][0-9].pdf) ;;
+*) fail NAME "invalid document name: $name" ;;
+esac
+
+# --- sha must be 64 lowercase hex characters ---------------------------------
+case $sha in
+*[!0-9a-f]*|'') fail CHECKSUM "invalid sha256 (expected 64 lowercase hex chars)" ;;
+esac
+[ "${#sha}" -eq 64 ] || fail CHECKSUM "invalid sha256 (expected 64 lowercase hex chars)"
+
+# --- size must be a non-negative integer -------------------------------------
+case $size in
+''|*[!0-9]*) fail SIZE "invalid size: $size" ;;
+esac
+
+compute_sha256() {
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "$1"
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "$1"
+    else
+        return 1
+    fi
+}
+
+# --- temp file inside the inbox; nothing outside is ever touched -------------
+incoming="$inbox/.incoming"
+mkdir -p "$incoming" 2>/dev/null || fail TMP "cannot create temp directory inside inbox"
+
+tmp=""
+cleanup() { [ -n "$tmp" ] && rm -f "$tmp" 2>/dev/null; }
+trap cleanup 0
+
+tmp=$(mktemp "$incoming/pv.XXXXXXXX") || fail TMP "cannot create temp file"
+
+# --- read exactly $size bytes; a broken connection ends early ---------------
+head -c "$size" > "$tmp" 2>/dev/null || fail WRITE "error writing temporary file"
+
+received=$(wc -c < "$tmp" | tr -d ' ')
+[ "$received" -eq "$size" ] || fail SIZE "received $received of $size bytes"
+
+actual=$(compute_sha256 "$tmp" | cut -d ' ' -f1) || fail IO "cannot compute checksum"
+case $actual in
+''|*[!0-9a-f]*) fail IO "cannot compute checksum" ;;
+esac
+[ "${#actual}" -eq 64 ] || fail IO "cannot compute checksum"
+[ "$actual" = "$sha" ] || fail CHECKSUM "checksum mismatch: received $actual, expected $sha"
+
+# Best-effort fsync of the temp file (GNU coreutils "sync -d file";
+# harmless no-op where unsupported, e.g. macOS).
+sync -d "$tmp" 2>/dev/null || :
+
+# --- atomic, no-clobber finalisation ------------------------------------------
+final="$inbox/$name"
+if [ -e "$final" ] || [ -L "$final" ]; then
+    existing=$(compute_sha256 "$final" | cut -d ' ' -f1) || fail IO "cannot read existing file"
+    if [ "$existing" = "$sha" ]; then
+        printf 'OK %s %s\n' "$name" "$sha"
+        exit 0
+    fi
+    fail EXISTS "file exists with different content: $name"
+fi
+ln "$tmp" "$final" 2>/dev/null || fail FINALIZE "cannot finalize: $name"
+
+printf 'OK %s %s\n' "$name" "$sha"
+exit 0
