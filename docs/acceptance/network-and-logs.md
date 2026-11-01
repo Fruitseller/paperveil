@@ -20,8 +20,8 @@ beschriebenen Skripte und Tests sind Teil desselben Commits auf diesem Branch).
 | Kriterium | Ergebnis | Testbefehl oder Schritte | Nachweis | Einschränkung |
 |---|---|---|---|---|
 | D01 – statische Netzwerkgrenze | **PASS** | `swift test --filter NetworkBoundary` (6 Tests) | Networking-APIs (`URLSession`, `URLRequest`, `NWConnection`, `CFStream`, `Socket`, `URL(string: "http…")`) ausschließlich in `Sources/PaperVeilDetection/LMStudio*.swift`; `Process`/`/usr/bin/ssh*` ausschließlich in `PaperVeilTransfer` und Tooling; keine festkodierten Nicht-Loopback-HTTP-URLs; `LMStudioEndpoint` verwirft `https://api.openai.com`, `http://192.168.1.10:1234`, `http://localhost.evil.com`, `http://127.0.0.1.nip.io` u. a. | Heuristischer Quellscan (Kommentare werden vor dem Matching entfernt; Regex-Literale nicht separat gelext – im aktuellen Code keine Treffer) |
-| D01 – offline (Fall a) | **PASS** (Mechanismus + echter Client-Code) | `sh scripts/network-check.sh` → lokale Arbeitslast (SHA-256 einer Fixture) unter `scripts/paperveil-network.sb` (`(deny network*)`); parallel `lsof`-Sampling des gesamten Prozessbaums alle 0,5 s | Arbeitslast erfolgreich, **null** Sockets im Prozessbaum; `curl` an `127.0.0.1:1234` unter dem Profil korrekt verweigert; `LMStudioClient`-Aufruf unter dem Profil schlägt korrekt fehl („Modellserver ist nicht erreichbar“) – kein stiller Fallback | Der konkrete `pv-eval report`-Offline-Lauf steht aus: `pv-eval` war im Arbeitszweig noch der Stub `print("pv-eval")`. Skript erneut ausführen, sobald `pv-eval report` existiert (siehe „Offene Punkte“) |
-| D01 – Loopback-only mit LLM (Fall b) | **PASS** | gleiche Skript-Ausführung: echter `LMStudioClient`-Aufruf (Release-Objekte von `PaperVeilDetection`) unter dem Profil `(allow network-outbound (remote ip "localhost:1234")) (deny network*)`, Sampling alle 0,5 s | Aufruf erfolgreich (`candidates=3 [address=1 birthDate=1 name=1]`); sämtliche beobachteten Verbindungen ausschließlich `127.0.0.1:… -> 127.0.0.1:1234`; Verbindung zu `192.0.2.1:1234` (RFC-5737-TEST-NET) unter demselben Profil korrekt verweigert | s. o.: `pv-eval report --llm-model`-Lauf ausständig; Sampling-Intervall 0,5 s – Verbindungen, die kürzer bestehen, sind theoretisch als Lücke möglich; `nettop` geprüft, aber `lsof` wegen eindeutiger PID-Zuordnung vorgezogen |
+| D01 – offline (Fall a) | **PASS** (Mechanismus + echter Client-Code) | `sh scripts/network-check.sh` → lokale Arbeitslast (SHA-256 einer Fixture) unter `scripts/paperveil-network.sb` (`(deny network*)`); parallel `lsof`-Sampling des gesamten Prozessbaums alle 0,5 s | Arbeitslast erfolgreich, **null** Sockets im Prozessbaum; `curl` an `127.0.0.1:1234` unter dem Profil korrekt verweigert; `LMStudioClient`-Aufruf unter dem Profil schlägt korrekt fehl („Modellserver ist nicht erreichbar“) – kein stiller Fallback | Nachlauf mit echtem `pv-eval report` am 2026-11-01: bestanden (siehe Abschnitt „Nachlauf mit pv-eval“) |
+| D01 – Loopback-only mit LLM (Fall b) | **PASS** | gleiche Skript-Ausführung: echter `LMStudioClient`-Aufruf (Release-Objekte von `PaperVeilDetection`) unter dem Profil `(allow network-outbound (remote ip "localhost:1234")) (deny network*)`, Sampling alle 0,5 s | Aufruf erfolgreich (`candidates=3 [address=1 birthDate=1 name=1]`); sämtliche beobachteten Verbindungen ausschließlich `127.0.0.1:… -> 127.0.0.1:1234`; Verbindung zu `192.0.2.1:1234` (RFC-5737-TEST-NET) unter demselben Profil korrekt verweigert | Nachlauf `pv-eval report --llm-model qwen3.8-27b --only F10c`: bestanden (siehe „Nachlauf mit pv-eval“); Sampling-Intervall 0,5 s – Verbindungen, die kürzer bestehen, sind theoretisch als Lücke möglich; `nettop` geprüft, aber `lsof` wegen eindeutiger PID-Zuordnung vorgezogen |
 | D01 – Sandbox-Verletzungslog | **nicht aussagekräftig** (siehe Einschränkung) | `log show --last 30m --predicate 'sender == "Sandbox"'`, gefiltert nach Prozessnamen (`netprobe`, `pv-eval`, `curl`) | Keine Netzwerk-Verweigerungen im Unified Log | Auf macOS 27.2 erscheinen Netzwerk-Verweigerungen unter `sandbox-exec` **nicht** im Unified Log (Datei-Verweigerungen erscheinen, Socket-Verweigerungen nicht). Die Verhaltens-Tests (Verbindung scheitert/erfolgt) sind der maßgebliche Nachweis |
 | D07 – Logs ohne Identifikatoren | **PASS** | `sh scripts/log-check.sh 30` | Unified Log (Subsysteme `de.paperveil.app`, `com.paperveil.PaperVeil` und Prozesse `pv-eval`/`netprobe`/`PaperVeil`): keines der 79 normalisierten Identifikator- und Klinik-Strings aus `annotations.json` gefunden | Nur Zeilen-basierte Suche (mehrzeilige Leaks über Zeilengrenzen würden nicht matchen); Werte mit `privacy: .private` erscheinen als `<private>` – das ist die erwartete Redaktion, kein Leck |
 
@@ -218,3 +218,24 @@ RESULT: PASS
   Tool den Subcommand implementiert hat.
 - **D07 (Log-Hygiene): bestanden** – keines der 79 Identifikator-/Klinik-Strings
   aus `annotations.json` im Unified Log des Prüffensters.
+
+
+## Nachlauf mit pv-eval (2026-11-01)
+
+Nach der Integration von `pv-eval` wurde `sh scripts/network-check.sh` erneut ausgeführt
+(macOS 27.2, Xcode 27.2, M4 Max, LM Studio `qwen3.8-27b`):
+
+```
+  [PASS] swift build -c release --product pv-eval
+  [PASS] model id 'qwen3.8-27b' is offered by the server
+  [PASS] pv-eval report (no LLM) succeeded with ALL network denied
+  [PASS] case (a) connections: no inet sockets observed in the process tree
+  [PASS] pv-eval report WITH LLM succeeded under the loopback-only profile
+  [PASS] case (b) pv-eval connections: only allowed connections observed (mode loopback)
+  [PASS] non-loopback connection (192.0.2.1, RFC 5737 TEST-NET) correctly DENIED under the loopback profile
+PASS: 7   FAIL: 0   SKIP: 0
+```
+
+Damit ist der offene Punkt aus „Offene Punkte“ erledigt: Der vollständige Qualitätslauf läuft
+ohne jede Netzwerkverbindung. Der LLM-Lauf (F10c, manipulative Anweisungen) baut ausschließlich
+Verbindungen zu `127.0.0.1:1234` auf.
