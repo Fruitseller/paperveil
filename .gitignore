@@ -1,0 +1,7 @@
+.build/
+.swiftpm/
+build/
+*.app
+/Fixtures/generated/
+.DS_Store
+/private/
