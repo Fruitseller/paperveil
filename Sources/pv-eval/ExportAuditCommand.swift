@@ -506,7 +506,7 @@ enum ExportAuditCommand {
         add("- **Git-Commit:** `\(environment.gitCommit)`")
         add("- **Betriebssystem:** \(environment.macOS)")
         add("- **Werkzeugkette:** \(environment.swiftVersion)")
-        add("- **Testsatz:** \(options.fixturesDir.path) – Schema-Version \(annotations.schemaVersion)")
+        add("- **Testsatz:** \(EvalDisplayPath(options.fixturesDir)) – Schema-Version \(annotations.schemaVersion)")
         add("- **Arbeitsverzeichnis:** \(options.workRoot.path)")
         add("- **Raster-Auflösung:** \(Int(options.dpi)) dpi")
         add("")

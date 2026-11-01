@@ -417,8 +417,8 @@ enum ReportCommand {
         add("- **Git-Commit:** `\(environment.gitCommit)`")
         add("- **Betriebssystem:** \(environment.macOS)")
         add("- **Werkzeugkette:** \(environment.swiftVersion)")
-        add("- **Testsatz:** \(options.fixturesDir.path) – Schema-Version \(annotations.schemaVersion), Generator \(annotations.generator), logisches Fixturedatum \(annotations.contentDate)")
-        add("- **Sperrliste:** `\(options.fixturesDir.appendingPathComponent("blocklist.json").path)` – \(blocklist.entries.count) fiktive Einträge")
+        add("- **Testsatz:** \(EvalDisplayPath(options.fixturesDir)) – Schema-Version \(annotations.schemaVersion), Generator \(annotations.generator), logisches Fixturedatum \(annotations.contentDate)")
+        add("- **Sperrliste:** `\(EvalDisplayPath(options.fixturesDir.appendingPathComponent("blocklist.json")))` – \(blocklist.entries.count) fiktive Einträge")
         if let llm = options.llm {
             add("- **LLM:** **echter lokaler LM-Studio-Lauf** – Modell-ID `\(llm.model)` (validiert gegen `/v1/models`), Endpunkt \(llm.endpoint), Timeout \(llm.timeoutSeconds) s je Seite; Läufe sequenziell, Latenz je Seite gemessen")
         } else {
