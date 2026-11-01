@@ -209,8 +209,21 @@ public enum OCRCompute {
                             space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGImageAlphaInfo.none.rawValue)!
         ctx.setFillColor(gray: 1, alpha: 1); ctx.fill(CGRect(x: 0, y: 0, width: 64, height: 32))
         guard let img = ctx.makeImage() else { return false }
-        return (try? await perform(RecognizeTextRequest(), on: img)) != nil
+        // Hard timeout: on some virtualised Macs Vision neither returns nor honours cancellation.
+        let gate = ProbeGate()
+        return await withCheckedContinuation { (cont: CheckedContinuation<Bool, Never>) in
+            Task.detached {
+                let ok = (try? await perform(RecognizeTextRequest(), on: img)) != nil
+                if gate.claim() { cont.resume(returning: ok) }
+            }
+            Task.detached {
+                try? await Task.sleep(for: .seconds(timeoutSeconds))
+                if gate.claim() { cont.resume(returning: false) }
+            }
+        }
     }
+
+    public static let timeoutSeconds: Double = 30
 
     static func cpuOnly(_ request: RecognizeTextRequest) -> RecognizeTextRequest {
         var r = request
@@ -218,4 +231,10 @@ public enum OCRCompute {
         for stage in r.supportedComputeStageDevices.keys { r.setComputeDevice(cpu, for: stage) }
         return r
     }
+}
+
+private final class ProbeGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var done = false
+    func claim() -> Bool { lock.withLock { if done { return false }; done = true; return true } }
 }
