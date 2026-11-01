@@ -1,0 +1,83 @@
+{
+  "entries" : [
+    {
+      "value" : "Erika Mustermann",
+      "category" : "name",
+      "variants" : [
+        "Mustermann"
+      ]
+    },
+    {
+      "value" : "Musterstraße 5",
+      "category" : "address"
+    },
+    {
+      "value" : "12345 Musterstadt",
+      "category" : "address"
+    },
+    {
+      "value" : "12.03.1967",
+      "category" : "birthDate"
+    },
+    {
+      "value" : "X123456789",
+      "category" : "insuranceNumber"
+    },
+    {
+      "value" : "P-471108",
+      "category" : "patientID"
+    },
+    {
+      "value" : "+49 30 1234567",
+      "category" : "phone"
+    },
+    {
+      "value" : "erika.mustermann@example.org",
+      "category" : "email"
+    },
+    {
+      "value" : "Max Beispielmann",
+      "category" : "name"
+    },
+    {
+      "value" : "Musterweg 17",
+      "category" : "address"
+    },
+    {
+      "value" : "05.11.1958",
+      "category" : "birthDate"
+    },
+    {
+      "value" : "Y987654321",
+      "category" : "insuranceNumber"
+    },
+    {
+      "value" : "+49 30 7654321",
+      "category" : "phone"
+    },
+    {
+      "value" : "max.beispielmann@example.org",
+      "category" : "email"
+    },
+    {
+      "value" : "Paula Testfrau",
+      "category" : "name"
+    },
+    {
+      "value" : "Testgasse 9",
+      "category" : "address"
+    },
+    {
+      "value" : "54321 Beispielhafen",
+      "category" : "address"
+    },
+    {
+      "value" : "21.06.1985",
+      "category" : "birthDate"
+    },
+    {
+      "value" : "Z567890123",
+      "category" : "insuranceNumber"
+    }
+  ]
+}
