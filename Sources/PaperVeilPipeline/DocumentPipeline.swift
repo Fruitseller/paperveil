@@ -66,7 +66,27 @@ public struct DocumentPipeline: Sendable {
             try Task.checkCancellation()
         }
         if let expected = expectedSHA256, try SHA256Hex.of(fileAt: url) != expected { throw PipelineError.originalChanged }
+        findings += Self.propagate(findings, in: extraction.pages, documentID: documentID)
         return Analysis(pageCount: pageCount, pages: extraction.pages, findings: Self.deduplicate(findings), warnings: warnings)
+    }
+
+    /// A value found once (e.g. a name after "Patientin:") is also searched everywhere else in
+    /// the document, including occurrences without context such as a bare header line.
+    /// Matching uses the blocklist's variant logic; the origin of the source finding is kept.
+    public static func propagate(_ findings: [Finding], in pages: [PageText], documentID: DocumentID) -> [Finding] {
+        var result: [Finding] = []
+        for origin in FindingOrigin.allCases where origin != .manual {
+            let entries = Set(findings.filter { $0.origin == origin && $0.text.count >= 4 }
+                .map { Blocklist.Entry(value: $0.text.replacingOccurrences(of: "\n", with: " "), category: $0.category) })
+            guard !entries.isEmpty else { continue }
+            result += Blocklist(entries: Array(entries)).detect(in: pages, documentID: documentID).map {
+                var f = $0
+                f.origin = origin
+                f.note = "Weitere Fundstelle eines erkannten Werts"
+                return f
+            }
+        }
+        return result
     }
 
     /// Drops findings whose rects are identical to an earlier one on the same page

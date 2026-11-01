@@ -143,10 +143,14 @@ public struct Blocklist: Codable, Equatable, Hashable, Sendable {
             // Identifier semantics: ignore separators between the characters.
             let significant = needle.filter { $0.isLetter || $0.isNumber || $0 == "+" }
             guard !significant.isEmpty else { return nil }
-            let pattern = "(?<![0-9\\p{L}+])"
+            // Digit edges only require a non-digit neighbour, so OCR artefacts glued to a
+            // number ("12.03.1967ł") still match; over-redaction is the safe direction.
+            let lead = significant.first!.isNumber ? "(?<![0-9])" : "(?<![0-9\\p{L}+])"
+            let trail = significant.last!.isNumber ? "(?![0-9])" : "(?![0-9\\p{L}])"
+            let pattern = lead
                 + significant.map { NSRegularExpression.escapedPattern(for: String($0)) }
                     .joined(separator: "[\\s./\\-]*")
-                + "(?![0-9\\p{L}])"
+                + trail
             return try? NSRegularExpression(pattern: pattern)
         }
 
