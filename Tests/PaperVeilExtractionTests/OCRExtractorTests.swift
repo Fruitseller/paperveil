@@ -4,7 +4,7 @@ import Testing
 import PaperVeilCore
 @testable import PaperVeilExtraction
 
-@Suite("OCRExtractor")
+@Suite("OCRExtractor", .requiresOCR)
 struct OCRExtractorTests {
 
     @Test("Bildseite wird per OCR erkannt; Wörter überlappen die Zeichnungsposition",

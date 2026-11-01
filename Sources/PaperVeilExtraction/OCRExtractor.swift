@@ -184,16 +184,32 @@ private extension Double {
 /// `PAPERVEIL_OCR_CPU_ONLY=1` forces the CPU path.
 public enum OCRCompute {
     public static func perform(_ request: RecognizeTextRequest, on image: CGImage) async throws -> [RecognizedTextObservation] {
-        if ProcessInfo.processInfo.environment["PAPERVEIL_OCR_CPU_ONLY"] == "1" {
-            return try await cpuOnly(request).perform(on: image)
+        var attempts: [RecognizeTextRequest] = []
+        if ProcessInfo.processInfo.environment["PAPERVEIL_OCR_CPU_ONLY"] != "1" { attempts.append(request) }
+        attempts.append(cpuOnly(request))
+        var fast = cpuOnly(request)
+        fast.recognitionLevel = .fast
+        attempts.append(fast)
+        var lastError: Error = CancellationError()
+        for attempt in attempts {
+            do {
+                return try await attempt.perform(on: image)
+            } catch is CancellationError {
+                throw CancellationError()
+            } catch {
+                lastError = error
+            }
         }
-        do {
-            return try await request.perform(on: image)
-        } catch is CancellationError {
-            throw CancellationError()
-        } catch {
-            return try await cpuOnly(request).perform(on: image)
-        }
+        throw lastError
+    }
+
+    /// True if Vision OCR works on this machine at all (probe on a tiny image).
+    public static func isAvailable() async -> Bool {
+        let ctx = CGContext(data: nil, width: 64, height: 32, bitsPerComponent: 8, bytesPerRow: 0,
+                            space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGImageAlphaInfo.none.rawValue)!
+        ctx.setFillColor(gray: 1, alpha: 1); ctx.fill(CGRect(x: 0, y: 0, width: 64, height: 32))
+        guard let img = ctx.makeImage() else { return false }
+        return (try? await perform(RecognizeTextRequest(), on: img)) != nil
     }
 
     static func cpuOnly(_ request: RecognizeTextRequest) -> RecognizeTextRequest {
