@@ -46,7 +46,7 @@ public struct JobRepository: Sendable {
         try FileManager.default.createDirectory(at: paths.root, withIntermediateDirectories: true)
         let enc = JSONEncoder()
         enc.outputFormatting = [.prettyPrinted, .sortedKeys]
-        try enc.encode(jobs).write(to: paths.jobsFile, options: [.atomic, .completeFileProtection])
+        try enc.encode(jobs).write(to: paths.jobsFile, options: .atomic)
     }
 
     /// Deletes PaperVeil's own working data for one document. Never touches the original.
