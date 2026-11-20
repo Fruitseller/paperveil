@@ -33,14 +33,15 @@ import Testing
         // Every security option is present in -o pairs.
         for option in [
             "StrictHostKeyChecking=yes",
-            "UserKnownHostsFile=\(knownHosts.path)",
+            "UserKnownHostsFile=\"\(knownHosts.path)\"",
             "GlobalKnownHostsFile=/dev/null",
             "BatchMode=yes",
             "IdentitiesOnly=yes",
         ] {
             #expect(args.contains("-o") && args.contains(option), "Fehlende ssh-Option: \(option)")
         }
-        #expect(args.contains("UserKnownHostsFile=\(knownHosts.path)"), "App-known_hosts muss verwendet werden")
+        #expect(args.contains("UserKnownHostsFile=\"\(knownHosts.path)\""), "App-known_hosts muss verwendet werden")
+        #expect(optionValue(after: "-F") == "/dev/null", "~/.ssh/config darf die Hostschlüsselprüfung nicht beeinflussen")
         #expect(optionValue(after: "-p") == "2222")
         #expect(optionValue(after: "-i") == "/Users/test/.ssh/id_ed25519")
         #expect(args.contains("paperveil@example.org"))
@@ -64,6 +65,15 @@ import Testing
         )
         #expect(!args.contains("-i"))
         #expect(optionCount(args, "-o") == 5)  // keine -o Duplikate
+    }
+
+    @Test func knownHostsPathWithSpacesStaysOneFile() {
+        let file = URL(fileURLWithPath: "/Users/x/Library/Application Support/PaperVeil/known_hosts")
+        let config = TransferConfiguration(host: "example.org", user: "u", identityFilePath: " /Users/x/.ssh/k.pub")
+        let args = TransferService.sshArguments(config: config, knownHostsFile: file, name: "PV-1234ABCD-r1.pdf",
+                                                sha256: String(repeating: "c", count: 64), byteCount: 1)
+        #expect(args.contains("UserKnownHostsFile=\"\(file.path)\""))
+        #expect(args[args.firstIndex(of: "-i")! + 1] == "/Users/x/.ssh/k")
     }
 
     private func optionCount(_ args: [String], _ option: String) -> Int {

@@ -82,6 +82,9 @@ public final class TransferService: Sendable {
     /// plus an app-managed `known_hosts` file mean an unknown or changed host key
     /// fails instead of being accepted; `BatchMode=yes` prevents interactive
     /// prompts (and thus hangs); `IdentitiesOnly=yes` restricts to the configured key.
+    /// `-F /dev/null` keeps the user's `~/.ssh/config` (e.g. `HostKeyAlias`, `HostName`)
+    /// from changing which host key is looked up. The known_hosts path is quoted because
+    /// ssh splits `UserKnownHostsFile` on whitespace ("Application Support").
     public static func sshArguments(
         config: TransferConfiguration,
         knownHostsFile: URL,
@@ -89,10 +92,10 @@ public final class TransferService: Sendable {
         sha256: String,
         byteCount: Int
     ) -> [String] {
-        var arguments: [String] = []
+        var arguments: [String] = ["-F", "/dev/null"]
         for option in [
             "StrictHostKeyChecking=yes",
-            "UserKnownHostsFile=\(knownHostsFile.path)",
+            "UserKnownHostsFile=\"\(knownHostsFile.path)\"",
             "GlobalKnownHostsFile=/dev/null",
             "BatchMode=yes",
             "IdentitiesOnly=yes",
@@ -100,11 +103,18 @@ public final class TransferService: Sendable {
             arguments += ["-o", option]
         }
         arguments += ["-p", String(config.port)]
-        if let identity = config.identityFilePath, !identity.isEmpty {
+        if let identity = privateIdentityPath(config.identityFilePath) {
             arguments += ["-i", identity]
         }
         arguments += [config.destination, "--", "put", name, sha256, String(byteCount)]
         return arguments
+    }
+
+    /// Trims the configured identity path and maps a public key (`.pub`) to its private key.
+    static func privateIdentityPath(_ path: String?) -> String? {
+        guard var p = path?.trimmingCharacters(in: .whitespacesAndNewlines), !p.isEmpty else { return nil }
+        if p.hasSuffix(".pub") { p.removeLast(4) }
+        return p
     }
 
     /// Runs the `put` protocol against the configured server. Throws

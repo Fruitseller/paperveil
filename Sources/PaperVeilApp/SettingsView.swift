@@ -182,7 +182,8 @@ struct TransferSettingsView: View {
         let h = host.trimmingCharacters(in: .whitespaces)
         let new: TransferConfiguration? = h.isEmpty ? nil : TransferConfiguration(
             host: h, port: port, user: user.trimmingCharacters(in: .whitespaces),
-            identityFilePath: identity.isEmpty ? nil : (identity as NSString).expandingTildeInPath)
+            identityFilePath: { let i = identity.trimmingCharacters(in: .whitespaces)
+                                return i.isEmpty ? nil : (i as NSString).expandingTildeInPath }())
         if model.settings.transfer != new { model.settings.transfer = new }
     }
 
