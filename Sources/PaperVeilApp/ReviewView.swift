@@ -21,18 +21,20 @@ struct ReviewView: View {
                     model.addManual(pageIndex: page, rect: rect, in: job.id)
                 }
             }
-            .frame(minWidth: 260, idealWidth: 420)
+            .frame(minWidth: 260, idealWidth: 420, maxHeight: .infinity)
             VStack(spacing: 0) {
                 paneHeader("Bereinigte Vorschau", detail: exportCaption)
                 if exportURL != nil {
                     ExportPDFView(url: exportURL)
                 } else {
                     ContentUnavailableView("Noch kein Export", systemImage: "doc")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .frame(minWidth: 260, idealWidth: 420)
-            inspector.frame(minWidth: 340, idealWidth: 380, maxWidth: 480)
+            .frame(minWidth: 260, idealWidth: 420, maxHeight: .infinity)
+            inspector.frame(minWidth: 340, idealWidth: 380, maxWidth: 480, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .toolbar {
             Toggle(isOn: $marking) { Label("Bereich markieren", systemImage: "rectangle.dashed") }
                 .disabled(job.isBusy)

@@ -11,7 +11,7 @@ struct SettingsView: View {
             Tab("Übertragung", systemImage: "arrow.up.doc") { TransferSettingsView() }
             Tab("Daten", systemImage: "externaldrive") { DataSettingsView() }
         }
-        .padding()
+        .formStyle(.grouped) // scrolls and keeps labels/long texts aligned in the fixed-size window
     }
 }
 
@@ -136,37 +136,34 @@ struct TransferSettingsView: View {
 
     var body: some View {
         Form {
-            Text("Übertragen werden nur freigegebene, bereinigte Exporte per SSH an ein Empfangsskript "
-                 + "(receiver/paperveil-receive) als forced command. Keine Standardziele; private Hostnamen gehören nicht ins Repository.")
-                .font(.caption).foregroundStyle(.secondary)
-            TextField("Host", text: $host)
-            TextField("Port", value: $port, format: .number.grouping(.never))
-            TextField("Benutzer", text: $user)
-            TextField("SSH-Schlüsseldatei (optional, z. B. ~/.ssh/paperveil_ed25519)", text: $identity)
-            HStack {
-                Button("Speichern") {
-                    model.settings.transfer = host.isEmpty ? nil : TransferConfiguration(
-                        host: host, port: port, user: user,
-                        identityFilePath: identity.isEmpty ? nil : (identity as NSString).expandingTildeInPath)
-                    message = "Gespeichert."
-                }
+            Section {
+                TextField("Host", text: $host)
+                TextField("Port", value: $port, format: .number.grouping(.never))
+                TextField("Benutzer", text: $user)
+                TextField("SSH-Schlüsseldatei", text: $identity, prompt: Text("optional, z. B. ~/.ssh/paperveil_ed25519"))
+            } header: { Text("Ziel") } footer: {
+                Text("Übertragen werden nur freigegebene, bereinigte Exporte per SSH an ein Empfangsskript "
+                     + "(receiver/paperveil-receive) als forced command. Änderungen werden sofort gespeichert.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Section("Hostschlüssel") {
                 Button("Hostschlüssel abrufen") { Task { await fetch() } }.disabled(host.isEmpty)
-            }
-            if let fetched {
-                VStack(alignment: .leading) {
-                    Text("Abgerufener Schlüssel (\(fetched.keyType)):")
-                    Text(fetched.fingerprint).font(.body.monospaced()).textSelection(.enabled)
-                    Text("Vergleiche den Fingerabdruck über einen unabhängigen Kanal mit dem Server "
-                         + "(ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub). Nur bei Übereinstimmung bestätigen.")
-                        .font(.caption).foregroundStyle(.secondary)
-                    Button("Fingerabdruck stimmt – Schlüssel festlegen") { pin(fetched) }
+                if let fetched {
+                    VStack(alignment: .leading) {
+                        Text("Abgerufener Schlüssel (\(fetched.keyType)):")
+                        Text(fetched.fingerprint).font(.body.monospaced()).textSelection(.enabled)
+                        Text("Vergleiche den Fingerabdruck über einen unabhängigen Kanal mit dem Server "
+                             + "(ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub). Nur bei Übereinstimmung bestätigen.")
+                            .font(.caption).foregroundStyle(.secondary)
+                        Button("Fingerabdruck stimmt – Schlüssel festlegen") { pin(fetched) }
+                    }
                 }
+                LabeledContent("Festgelegte Hostschlüssel", value: "\(pinned.count)")
+                Button("Festgelegte Hostschlüssel entfernen", role: .destructive) {
+                    try? model.engine.knownHosts.clear(); reload()
+                }
+                if let message { Text(message).font(.caption) }
             }
-            LabeledContent("Festgelegte Hostschlüssel", value: "\(pinned.count)")
-            Button("Festgelegte Hostschlüssel entfernen", role: .destructive) {
-                try? model.engine.knownHosts.clear(); reload()
-            }
-            if let message { Text(message).font(.caption) }
         }
         .onAppear {
             if let t = model.settings.transfer {
@@ -174,6 +171,19 @@ struct TransferSettingsView: View {
             }
             reload()
         }
+        .onChange(of: host) { save() }
+        .onChange(of: port) { save() }
+        .onChange(of: user) { save() }
+        .onChange(of: identity) { save() }
+    }
+
+    /// Saved on every edit so closing the window or switching tabs cannot lose the input.
+    private func save() {
+        let h = host.trimmingCharacters(in: .whitespaces)
+        let new: TransferConfiguration? = h.isEmpty ? nil : TransferConfiguration(
+            host: h, port: port, user: user.trimmingCharacters(in: .whitespaces),
+            identityFilePath: identity.isEmpty ? nil : (identity as NSString).expandingTildeInPath)
+        if model.settings.transfer != new { model.settings.transfer = new }
     }
 
     private func reload() { pinned = (try? model.engine.knownHosts.pinnedLines()) ?? [] }
